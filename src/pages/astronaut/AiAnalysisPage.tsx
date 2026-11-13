@@ -58,7 +58,7 @@ export function AiAnalysisPage() {
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="flex items-center gap-2 text-base font-semibold text-white">
+            <h2 className="flex items-center gap-2 text-base font-semibold text-ink">
               <Sparkles className="size-4 text-orbit-cyan" aria-hidden="true" />
               AI health analysis
             </h2>
@@ -109,8 +109,8 @@ export function AiAnalysisPage() {
       </div>
 
       {run.status === "done" ? (
-        <details className="rounded-xl border border-orbit-line bg-black/20 p-4">
-          <summary className="cursor-pointer text-sm font-medium text-white">Data sent to the analysis engine</summary>
+        <details className="rounded-lg border border-orbit-line bg-black/20 p-4">
+          <summary className="cursor-pointer text-sm font-medium text-ink">Data sent to the analysis engine</summary>
           <pre className="mt-3 max-h-80 overflow-auto rounded-lg bg-black/40 p-3 font-mono text-[11px] leading-relaxed text-orbit-muted">
             {JSON.stringify(run.request, null, 2)}
           </pre>

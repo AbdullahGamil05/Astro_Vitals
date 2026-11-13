@@ -32,9 +32,9 @@ export function MedicalOverviewPage() {
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Total astronauts" value={crew.length} hint="Across 2 active missions" icon={Users} />
-        <StatCard label="Stable" value={stable} hint="Within personal baseline" icon={HeartPulse} color="#20C7A5" />
-        <StatCard label="Requiring attention" value={warning + critical} hint={`${warning} warning · ${critical} critical`} icon={AlertTriangle} color="#F59E42" />
-        <StatCard label="Critical alerts" value={criticalAlerts} hint="Active, unresolved" icon={ShieldAlert} color="#F0524F" />
+        <StatCard label="Stable" value={stable} hint="Within personal baseline" icon={HeartPulse} color="#3FBF9F" />
+        <StatCard label="Requiring attention" value={warning + critical} hint={`${warning} warning · ${critical} critical`} icon={AlertTriangle} color="#F97316" />
+        <StatCard label="Critical alerts" value={criticalAlerts} hint="Active, unresolved" icon={ShieldAlert} color="#EF4444" />
       </div>
 
       <div className="grid gap-6 xl:grid-cols-3">
@@ -46,20 +46,20 @@ export function MedicalOverviewPage() {
           />
           <div style={{ height: 300 }} role="img" aria-label="Crew health index over 14 days">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={crewTrend} margin={{ top: 6, right: 8, left: -18, bottom: 0 }}>
-                <CartesianGrid stroke="rgb(255 255 255 / 0.05)" vertical={false} />
+              <LineChart data={crewTrend} margin={{ top: 6, right: 8, left: 0, bottom: 0 }}>
+                <CartesianGrid stroke="rgb(255 255 255 / 0.08)" vertical={false} />
                 <XAxis dataKey="label" tick={axisTick} tickLine={false} axisLine={false} interval={2} />
-                <YAxis tick={axisTick} tickLine={false} axisLine={false} domain={[20, 100]} width={44} />
-                <Tooltip contentStyle={chartTooltipStyle} labelStyle={{ color: "#8AA0BA" }} />
-                <Legend wrapperStyle={{ fontSize: 12, color: "#8AA0BA" }} iconType="circle" />
+                <YAxis tick={axisTick} tickLine={false} axisLine={false} domain={[20, 100]} width={38} />
+                <Tooltip contentStyle={chartTooltipStyle} labelStyle={{ color: "#A3B1C6" }} />
+                <Legend wrapperStyle={{ fontSize: 11, color: "#A3B1C6", fontFamily: "JetBrains Mono, monospace" }} iconType="plainline" />
                 {astronauts.map((a) => (
                   <Line
                     key={a.id}
-                    type="monotone"
+                    type="linear"
                     dataKey={a.id}
                     name={a.name}
-                    stroke={a.status === "stable" ? ["#4A90FF", "#20C7A5", "#8B9CF7"][astronauts.filter((x) => x.status === "stable").indexOf(a)] : statusColor[a.status]}
-                    strokeWidth={a.status === "stable" ? 1.8 : 2.6}
+                    stroke={a.status === "stable" ? ["#3B82F6", "#E2E8F0", "#94A3B8"][astronauts.filter((x) => x.status === "stable").indexOf(a)] : statusColor[a.status]}
+                    strokeWidth={a.status === "stable" ? 1.5 : 2.25}
                     dot={false}
                   />
                 ))}
@@ -89,7 +89,7 @@ export function MedicalOverviewPage() {
                   <span className="size-2.5 rounded-full" style={{ backgroundColor: d.color }} />
                   {d.name}
                 </span>
-                <span className="font-mono text-white">{d.value}</span>
+                <span className="font-mono text-ink">{d.value}</span>
               </li>
             ))}
           </ul>
@@ -115,7 +115,7 @@ export function MedicalOverviewPage() {
                   <SeverityDot severity={ev.severity} />
                   <Avatar name={a.name} from={a.avatarFrom} to={a.avatarTo} size={30} />
                   <span className="min-w-0 flex-1">
-                    <span className="block text-sm text-white">{ev.text}</span>
+                    <span className="block text-sm text-ink">{ev.text}</span>
                     <span className="block text-xs text-orbit-muted">{a.name}</span>
                   </span>
                   <span className="font-mono text-xs text-orbit-dim">{ev.time}</span>

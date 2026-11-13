@@ -81,7 +81,7 @@ export function DailyTasks({ astronautId }: { astronautId: string }) {
                 <span className="sr-only">{isDone ? "Completed" : "Not completed"}</span>
               </span>
               <span className="min-w-0 flex-1">
-                <span className={cn("block text-sm font-medium", isDone ? "text-orbit-muted line-through" : "text-white")}>{t.title}</span>
+                <span className={cn("block text-sm font-medium", isDone ? "text-orbit-muted line-through" : "text-ink")}>{t.title}</span>
                 <span className="block truncate text-xs text-orbit-muted">{detail}</span>
               </span>
               <span className={cn("w-12 text-right font-mono text-xs", isDone ? "text-orbit-teal" : "text-orbit-cyan")}>+{t.points}</span>

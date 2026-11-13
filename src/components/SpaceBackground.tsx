@@ -1,14 +1,38 @@
 import { useEffect, useRef } from "react";
+import { buildEarthSurface } from "./space/earth";
+import { TAU, mulberry32, smoothstep } from "./space/noise";
+import {
+  STAR_TEMPERATURES,
+  buildDustStars,
+  buildSkyTexture,
+  buildStars,
+  kelvinToRgb,
+  type SkyStar,
+} from "./space/sky";
 
-interface Star {
-  x: number;
-  y: number;
-  z: number;
-  r: number;
-  phase: number;
-  speed: number;
-  tint: string;
-  flare: boolean;
+/** Radians per second: the whole sky turns slowly, like a long-exposure from orbit. */
+const SKY_ROTATION_SPEED = 0.003;
+const EARTH_SCROLL_SPEED = 6;
+const SUNRISE_PERIOD = 120;
+const BASE_COLOR = "#02050d";
+
+interface Scene {
+  w: number;
+  h: number;
+  sky: number;
+  skyTexture: HTMLCanvasElement;
+  dustStars: HTMLCanvasElement;
+  stars: SkyStar[];
+  sprites: HTMLCanvasElement[];
+  spikeH: HTMLCanvasElement;
+  spikeV: HTMLCanvasElement;
+  earthSurface: HTMLCanvasElement;
+  earthR: number;
+  earthCx: number;
+  earthCy: number;
+  earthTop: number;
+  vignette: CanvasGradient;
+  limb: CanvasGradient;
 }
 
 interface Meteor {
@@ -18,67 +42,129 @@ interface Meteor {
   vy: number;
   age: number;
   life: number;
-  len: number;
+  length: number;
 }
 
-interface Ripple {
+interface Satellite {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  age: number;
+  life: number;
+}
+
+interface Lightning {
   x: number;
   y: number;
   age: number;
+  size: number;
 }
 
-const TAU = Math.PI * 2;
-const TINTS = ["255,255,255", "190,235,255", "150,225,240", "255,240,220", "170,200,255"];
-const RING_TILT = -0.38;
-
-function pickTint(): string {
-  return TINTS[Math.floor(Math.random() * TINTS.length)] ?? "255,255,255";
+function createCanvas(width: number, height: number): [HTMLCanvasElement, CanvasRenderingContext2D | null] {
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.ceil(width));
+  canvas.height = Math.max(1, Math.ceil(height));
+  return [canvas, canvas.getContext("2d")];
 }
 
-function buildStars(w: number, h: number): Star[] {
-  const count = Math.min(650, Math.floor((w * h) / 2600));
-  return Array.from({ length: count }, () => {
-    const z = 0.2 + Math.random() ** 2 * 0.8;
-    return {
-      x: Math.random() * w,
-      y: Math.random() * h,
-      z,
-      r: 0.3 + z * 1.0 + (Math.random() < 0.05 ? 0.7 : 0),
-      phase: Math.random() * TAU,
-      speed: 0.6 + Math.random() * 2.2,
-      tint: pickTint(),
-      flare: z > 0.8 && Math.random() < 0.4,
-    };
-  });
+function buildStarSprite(kelvin: number): HTMLCanvasElement {
+  const size = 64;
+  const [canvas, ctx] = createCanvas(size, size);
+  if (!ctx) return canvas;
+  const [r, g, b] = kelvinToRgb(kelvin).map(Math.round) as [number, number, number];
+  const soft = [r + (255 - r) * 0.55, g + (255 - g) * 0.55, b + (255 - b) * 0.55].map(Math.round);
+  const gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  gradient.addColorStop(0, "rgba(255,255,255,1)");
+  gradient.addColorStop(0.16, `rgba(${soft[0]},${soft[1]},${soft[2]},0.95)`);
+  gradient.addColorStop(0.3, `rgba(${r},${g},${b},0.5)`);
+  gradient.addColorStop(0.55, `rgba(${r},${g},${b},0.1)`);
+  gradient.addColorStop(1, `rgba(${r},${g},${b},0)`);
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, size, size);
+  return canvas;
 }
 
-function buildNebula(w: number, h: number): HTMLCanvasElement {
-  const nebula = document.createElement("canvas");
-  nebula.width = Math.ceil(w / 2);
-  nebula.height = Math.ceil(h / 2);
-  const nctx = nebula.getContext("2d");
-  if (!nctx) return nebula;
+function buildSpikeSprite(horizontal: boolean): HTMLCanvasElement {
+  const long = 256;
+  const short = 6;
+  const [canvas, ctx] = createCanvas(horizontal ? long : short, horizontal ? short : long);
+  if (!ctx) return canvas;
+  const gradient = horizontal ? ctx.createLinearGradient(0, 0, long, 0) : ctx.createLinearGradient(0, 0, 0, long);
+  gradient.addColorStop(0, "rgba(190,215,255,0)");
+  gradient.addColorStop(0.46, "rgba(220,235,255,0.55)");
+  gradient.addColorStop(0.5, "rgba(255,255,255,0.95)");
+  gradient.addColorStop(0.54, "rgba(220,235,255,0.55)");
+  gradient.addColorStop(1, "rgba(190,215,255,0)");
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  const fadeAcross = horizontal ? ctx.createLinearGradient(0, 0, 0, short) : ctx.createLinearGradient(0, 0, short, 0);
+  fadeAcross.addColorStop(0, "rgba(0,0,0,1)");
+  fadeAcross.addColorStop(0.5, "rgba(0,0,0,0)");
+  fadeAcross.addColorStop(1, "rgba(0,0,0,1)");
+  ctx.globalCompositeOperation = "destination-out";
+  ctx.fillStyle = fadeAcross;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  return canvas;
+}
 
-  const blobs: Array<[number, number, number, string, number]> = [
-    [0.12, 0.2, 0.6, "74,144,255", 0.2],
-    [0.86, 0.12, 0.55, "92,72,204", 0.2],
-    [0.55, 0.88, 0.65, "32,199,165", 0.13],
-    [0.28, 0.72, 0.45, "60,104,224", 0.16],
-    [0.72, 0.45, 0.38, "176,84,200", 0.07],
-  ];
-  const size = Math.max(nebula.width, nebula.height);
-  for (const [fx, fy, fr, rgb, alpha] of blobs) {
-    const cx = fx * nebula.width;
-    const cy = fy * nebula.height;
-    const radius = fr * size;
-    const g = nctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
-    g.addColorStop(0, `rgba(${rgb},${alpha})`);
-    g.addColorStop(0.5, `rgba(${rgb},${alpha * 0.4})`);
-    g.addColorStop(1, `rgba(${rgb},0)`);
-    nctx.fillStyle = g;
-    nctx.fillRect(0, 0, nebula.width, nebula.height);
-  }
-  return nebula;
+function buildScene(ctx: CanvasRenderingContext2D, w: number, h: number): Scene {
+  const sky = Math.ceil(Math.hypot(w, h) * 1.06);
+
+  const skyResolution = Math.min(640, Math.ceil(sky / 3));
+  const skyTexture = buildSkyTexture(skyResolution);
+
+  const bakedSize = Math.min(sky, 2600);
+  const dustStars = buildDustStars(sky, bakedSize);
+
+  const starCount = Math.min(2400, Math.floor((sky * sky) / 2600));
+  const stars = buildStars(sky, starCount);
+  const sprites = STAR_TEMPERATURES.map(buildStarSprite);
+
+  const earthR = Math.max(w * 1.6, 900);
+  const earthTop = h - Math.max(h * 0.17, 120);
+  const earthCx = w / 2;
+  const earthCy = earthTop + earthR;
+  const surfaceHeight = Math.ceil((h - earthTop) / 2);
+  const earthSurface = buildEarthSurface(Math.ceil(w / 2), Math.max(24, surfaceHeight));
+
+  const vignette = ctx.createRadialGradient(w / 2, h * 0.45, Math.min(w, h) * 0.35, w / 2, h * 0.45, Math.hypot(w, h) * 0.62);
+  vignette.addColorStop(0, "rgba(0,0,0,0)");
+  vignette.addColorStop(1, "rgba(0,2,8,0.62)");
+
+  const outer = earthR * 1.07;
+  const at = (radius: number) => Math.min(1, Math.max(0, (radius * earthR) / outer));
+  const limb = ctx.createRadialGradient(earthCx, earthCy, 0, earthCx, earthCy, outer);
+  limb.addColorStop(0, "rgba(0,0,0,0)");
+  limb.addColorStop(at(0.97), "rgba(40,90,200,0)");
+  limb.addColorStop(at(0.992), "rgba(70,140,255,0.2)");
+  limb.addColorStop(at(0.9985), "rgba(120,190,255,0.62)");
+  limb.addColorStop(at(1.0), "rgba(190,225,255,0.9)");
+  limb.addColorStop(at(1.0035), "rgba(110,180,255,0.5)");
+  limb.addColorStop(at(1.009), "rgba(60,130,245,0.2)");
+  limb.addColorStop(at(1.016), "rgba(70,230,170,0.075)");
+  limb.addColorStop(at(1.024), "rgba(190,90,110,0.03)");
+  limb.addColorStop(at(1.04), "rgba(30,70,200,0.015)");
+  limb.addColorStop(1, "rgba(0,0,0,0)");
+
+  return {
+    w,
+    h,
+    sky,
+    skyTexture,
+    dustStars,
+    stars,
+    sprites,
+    spikeH: buildSpikeSprite(true),
+    spikeV: buildSpikeSprite(false),
+    earthSurface,
+    earthR,
+    earthCx,
+    earthCy,
+    earthTop,
+    vignette,
+    limb,
+  };
 }
 
 export function SpaceBackground() {
@@ -87,358 +173,292 @@ export function SpaceBackground() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const context = canvas.getContext("2d", { alpha: false });
+    if (!context) return;
+    const ctx: CanvasRenderingContext2D = context;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const random = mulberry32(Math.floor(Math.random() * 1e9));
 
-    let w = 0;
-    let h = 0;
-    let stars: Star[] = [];
-    let nebula: HTMLCanvasElement | null = null;
-    const meteors: Meteor[] = [];
-    const ripples: Ripple[] = [];
-    const pointer = { x: 0, y: 0, tx: 0, ty: 0, px: -9999, py: -9999, lastMove: -99 };
-    let warp = 0;
+    let scene: Scene | null = null;
     let time = 0;
-    let nextMeteor = 1.5;
     let last = 0;
     let raf = 0;
+    let rebuildTimer = 0;
+    const meteors: Meteor[] = [];
+    const satellites: Satellite[] = [];
+    const flashes: Lightning[] = [];
+    let nextMeteor = 6 + random() * 8;
+    let nextSatellite = 9 + random() * 6;
+    let nextFlash = 3 + random() * 4;
 
-    const resize = () => {
-      w = window.innerWidth;
-      h = window.innerHeight;
+    const applySize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.floor(w * dpr);
-      canvas.height = Math.floor(h * dpr);
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      stars = buildStars(w, h);
-      nebula = buildNebula(w, h);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+    };
+
+    const rebuild = () => {
+      applySize();
+      scene = buildScene(ctx, window.innerWidth, window.innerHeight);
       if (reduced) render(0);
     };
 
-    const drawNebula = () => {
-      if (!nebula) return;
-      const scale = 2.3;
-      const drawW = nebula.width * scale;
-      const drawH = nebula.height * scale;
-      const driftX = Math.sin(time * 0.05) * 30;
-      const driftY = Math.cos(time * 0.04) * 20;
-      ctx.globalAlpha = 0.85 + Math.sin(time * 0.3) * 0.1;
-      ctx.drawImage(
-        nebula,
-        (w - drawW) / 2 - pointer.x * 22 + driftX,
-        (h - drawH) / 2 - pointer.y * 14 + driftY,
-        drawW,
-        drawH,
-      );
-      ctx.globalAlpha = 1;
+    const scheduleRebuild = () => {
+      applySize();
+      window.clearTimeout(rebuildTimer);
+      rebuildTimer = window.setTimeout(rebuild, 180);
     };
 
-    const drawRing = (front: boolean, radius: number) => {
-      ctx.save();
-      ctx.rotate(RING_TILT);
-      ctx.scale(1, 0.28);
-      const rings: Array<[number, number, number]> = [
-        [1.38, 0.05, 0.14],
-        [1.52, 0.03, 0.22],
-        [1.66, 0.07, 0.12],
-        [1.84, 0.02, 0.18],
-      ];
-      for (const [mult, width, alpha] of rings) {
-        ctx.beginPath();
-        ctx.arc(0, 0, radius * mult, front ? 0 : Math.PI, front ? Math.PI : TAU);
-        ctx.strokeStyle = `rgba(160,225,240,${alpha})`;
-        ctx.lineWidth = radius * width;
-        ctx.stroke();
-      }
-      ctx.restore();
-    };
-
-    const drawMoon = (radius: number, front: boolean) => {
-      const angle = time * 0.22;
-      const mx = Math.cos(angle) * radius * 2.15;
-      const my = Math.sin(angle) * radius * 2.15 * 0.28;
-      if (Math.sin(angle) > 0 !== front) return;
-      ctx.save();
-      ctx.rotate(RING_TILT);
-      const mr = radius * 0.09;
-      const g = ctx.createRadialGradient(mx - mr * 0.4, my - mr * 0.4, mr * 0.1, mx, my, mr);
-      g.addColorStop(0, "#d6e6f0");
-      g.addColorStop(1, "#2b3d52");
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(mx, my, mr, 0, TAU);
-      ctx.fill();
-      ctx.restore();
-    };
-
-    const drawPlanet = () => {
-      const R = Math.min(Math.max(Math.min(w, h) * 0.26, 110), 300);
-      const cx = w * 0.84 - pointer.x * 10;
-      const cy = h * 0.88 - pointer.y * 6;
+    const drawSky = (s: Scene) => {
+      const cx = s.w / 2;
+      const cy = s.h / 2;
+      const angle = time * SKY_ROTATION_SPEED;
 
       ctx.save();
       ctx.translate(cx, cy);
-      ctx.globalAlpha = 0.92;
-
-      const glow = ctx.createRadialGradient(0, 0, R * 0.85, 0, 0, R * 1.75);
-      glow.addColorStop(0, "rgba(74,144,255,0.24)");
-      glow.addColorStop(1, "rgba(74,144,255,0)");
-      ctx.fillStyle = glow;
-      ctx.beginPath();
-      ctx.arc(0, 0, R * 1.75, 0, TAU);
-      ctx.fill();
-
-      ctx.save();
-      ctx.rotate(RING_TILT);
-      ctx.scale(1, 0.28);
-      ctx.beginPath();
-      ctx.arc(0, 0, R * 2.15, 0, TAU);
-      ctx.strokeStyle = "rgba(255,255,255,0.05)";
-      ctx.lineWidth = 1;
-      ctx.stroke();
+      ctx.rotate(angle);
+      ctx.drawImage(s.skyTexture, -s.sky / 2, -s.sky / 2, s.sky, s.sky);
+      ctx.globalCompositeOperation = "lighter";
+      ctx.drawImage(s.dustStars, -s.sky / 2, -s.sky / 2, s.sky, s.sky);
       ctx.restore();
 
-      drawMoon(R, false);
-      drawRing(false, R);
+      const cos = Math.cos(angle);
+      const sin = Math.sin(angle);
+      ctx.globalCompositeOperation = "lighter";
+      for (const star of s.stars) {
+        const x = cx + star.x * cos - star.y * sin;
+        const y = cy + star.x * sin + star.y * cos;
+        const reach = star.radius * 8 + 8;
+        if (x < -reach || x > s.w + reach || y < -reach || y > s.h + reach) continue;
+
+        const shimmer = 1 - star.amplitude + star.amplitude * Math.sin(time * star.speed + star.phase);
+        const alpha = star.alpha * shimmer;
+        const sprite = s.sprites[star.bucket];
+        if (!sprite) continue;
+
+        const diameter = Math.max(3.2, star.radius * 2 * 3.6);
+        ctx.globalAlpha = Math.min(1, alpha);
+        ctx.drawImage(sprite, x - diameter / 2, y - diameter / 2, diameter, diameter);
+
+        if (star.spikes) {
+          const length = star.radius * 9;
+          ctx.globalAlpha = Math.min(1, alpha * 0.4);
+          ctx.drawImage(s.spikeH, x - length, y - 3, length * 2, 6);
+          ctx.drawImage(s.spikeV, x - 3, y - length, 6, length * 2);
+        }
+      }
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = "source-over";
+    };
+
+    const sunrise = () => {
+      const phase = Math.sin((time / SUNRISE_PERIOD) * TAU - 1.2);
+      return smoothstep(0.1, 0.95, phase);
+    };
+
+    const drawEarth = (s: Scene) => {
+      const { w, h, earthR, earthCx, earthCy, earthTop } = s;
+      const glow = sunrise();
+      const sunX = w * 0.78;
+      const sunY = earthCy - Math.sqrt(Math.max(0, earthR * earthR - (sunX - earthCx) ** 2));
 
       ctx.save();
       ctx.beginPath();
-      ctx.arc(0, 0, R, 0, TAU);
+      ctx.arc(earthCx, earthCy, earthR, 0, TAU);
       ctx.clip();
 
-      const base = ctx.createRadialGradient(-R * 0.4, -R * 0.4, R * 0.1, 0, 0, R * 1.1);
-      base.addColorStop(0, "#2f7a96");
-      base.addColorStop(0.5, "#17445f");
-      base.addColorStop(1, "#091a2e");
-      ctx.fillStyle = base;
-      ctx.fillRect(-R, -R, R * 2, R * 2);
+      ctx.fillStyle = "#01040b";
+      ctx.fillRect(0, earthTop - 4, w, h - earthTop + 8);
 
-      const bandCount = 10;
-      const bandH = (R * 2) / bandCount;
-      for (let i = 0; i < bandCount; i++) {
-        const y = -R + i * bandH;
-        ctx.beginPath();
-        ctx.moveTo(-R, y + bandH);
-        for (let x = -R; x <= R; x += 14) {
-          ctx.lineTo(x, y + Math.sin(x * 0.02 + time * 0.25 + i * 1.7) * R * 0.018);
-        }
-        ctx.lineTo(R, y + bandH);
-        ctx.closePath();
-        ctx.fillStyle = i % 2 === 0 ? "rgba(32,199,165,0.09)" : "rgba(10,30,56,0.22)";
-        ctx.fill();
+      const surfaceW = s.earthSurface.width * 2;
+      const offset = (time * EARTH_SCROLL_SPEED) % surfaceW;
+      const drawH = h - earthTop;
+      for (let x = -offset; x < w; x += surfaceW) {
+        ctx.drawImage(s.earthSurface, x, earthTop, surfaceW, drawH);
       }
 
-      const shade = ctx.createRadialGradient(-R * 0.45, -R * 0.45, R * 0.2, -R * 0.1, -R * 0.1, R * 1.6);
-      shade.addColorStop(0, "rgba(3,8,18,0)");
-      shade.addColorStop(0.55, "rgba(3,8,18,0.05)");
-      shade.addColorStop(1, "rgba(3,8,18,0.9)");
-      ctx.fillStyle = shade;
-      ctx.fillRect(-R, -R, R * 2, R * 2);
-      ctx.restore();
-
-      ctx.beginPath();
-      ctx.arc(0, 0, R - 1, Math.PI * 0.92, Math.PI * 1.62);
-      ctx.strokeStyle = "rgba(130,235,245,0.4)";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      drawRing(true, R);
-      drawMoon(R, true);
-      ctx.restore();
-    };
-
-    const drawStars = () => {
-      const cx = w / 2;
-      const cy = h / 2;
-      const interactive = time - pointer.lastMove < 4;
-      const near: Array<{ x: number; y: number; d: number }> = [];
-
-      for (const s of stars) {
-        s.x -= 3 * s.z * lastDt;
-        s.y += 0.8 * s.z * lastDt;
-        if (s.x < -20) s.x += w + 40;
-        if (s.y > h + 20) s.y -= h + 40;
-
-        let px = s.x + pointer.x * s.z * 28;
-        let py = s.y + pointer.y * s.z * 18;
-
-        const dx = px - cx;
-        const dy = py - cy;
-        const dist = Math.hypot(dx, dy) || 1;
-        const ux = dx / dist;
-        const uy = dy / dist;
-        px += ux * warp * s.z * 40;
-        py += uy * warp * s.z * 40;
-
-        let boost = 0;
-        if (interactive) {
-          const mdx = px - pointer.px;
-          const mdy = py - pointer.py;
-          const md = Math.hypot(mdx, mdy) || 1;
-          if (md < 150) {
-            const f = 1 - md / 150;
-            px += (mdx / md) * f * 14 * s.z;
-            py += (mdy / md) * f * 14 * s.z;
-            boost = f * 0.6;
-            if (md < 130 && near.length < 14) near.push({ x: px, y: py, d: md });
-          }
-        }
-
-        const twinkle = 0.5 + 0.5 * Math.sin(time * s.speed + s.phase);
-        const alpha = Math.min(1, (0.3 + 0.7 * twinkle) * (0.3 + 0.7 * s.z) + boost);
-        const streak = warp * (20 + 120 * s.z);
-
-        if (streak > 2) {
-          ctx.beginPath();
-          ctx.moveTo(px, py);
-          ctx.lineTo(px - ux * streak, py - uy * streak);
-          ctx.strokeStyle = `rgba(${s.tint},${alpha})`;
-          ctx.lineWidth = s.r;
-          ctx.stroke();
+      ctx.globalCompositeOperation = "lighter";
+      for (let i = flashes.length - 1; i >= 0; i--) {
+        const f = flashes[i];
+        if (!f) continue;
+        const p = f.age / 0.45;
+        if (p >= 1) {
+          flashes.splice(i, 1);
           continue;
         }
-
-        ctx.fillStyle = `rgba(${s.tint},${alpha})`;
-        ctx.beginPath();
-        ctx.arc(px, py, s.r, 0, TAU);
-        ctx.fill();
-
-        if (s.r > 1.2) {
-          ctx.fillStyle = `rgba(${s.tint},${alpha * 0.16})`;
-          ctx.beginPath();
-          ctx.arc(px, py, s.r * 3.2, 0, TAU);
-          ctx.fill();
-        }
-
-        if (s.flare) {
-          const len = s.r * (5 + twinkle * 5);
-          ctx.strokeStyle = `rgba(${s.tint},${alpha * 0.45})`;
-          ctx.lineWidth = 0.6;
-          ctx.beginPath();
-          ctx.moveTo(px - len, py);
-          ctx.lineTo(px + len, py);
-          ctx.moveTo(px, py - len);
-          ctx.lineTo(px, py + len);
-          ctx.stroke();
-        }
+        const pulse = (p < 0.2 ? p / 0.2 : p < 0.35 ? 0.35 : p < 0.5 ? 0.9 : 1 - (p - 0.5) / 0.5) * (1 - p * 0.4);
+        const g = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.size);
+        g.addColorStop(0, `rgba(190,210,255,${0.55 * pulse})`);
+        g.addColorStop(0.4, `rgba(110,150,230,${0.18 * pulse})`);
+        g.addColorStop(1, "rgba(80,110,200,0)");
+        ctx.fillStyle = g;
+        ctx.fillRect(f.x - f.size, f.y - f.size, f.size * 2, f.size * 2);
       }
 
-      if (near.length > 0) {
-        ctx.lineWidth = 0.8;
-        for (let i = 0; i < near.length; i++) {
-          const a = near[i];
-          if (!a) continue;
-          ctx.strokeStyle = `rgba(74,144,255,${(1 - a.d / 130) * 0.55})`;
-          ctx.beginPath();
-          ctx.moveTo(pointer.px, pointer.py);
-          ctx.lineTo(a.x, a.y);
-          ctx.stroke();
-          for (let j = i + 1; j < near.length; j++) {
-            const b = near[j];
-            if (!b) continue;
-            const d = Math.hypot(a.x - b.x, a.y - b.y);
-            if (d < 90) {
-              ctx.strokeStyle = `rgba(74,144,255,${(1 - d / 90) * 0.4})`;
-              ctx.beginPath();
-              ctx.moveTo(a.x, a.y);
-              ctx.lineTo(b.x, b.y);
-              ctx.stroke();
-            }
-          }
-        }
+      if (glow > 0.001) {
+        const g = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, w * 0.55);
+        g.addColorStop(0, `rgba(255,170,90,${0.34 * glow})`);
+        g.addColorStop(0.35, `rgba(120,90,160,${0.12 * glow})`);
+        g.addColorStop(1, "rgba(30,60,140,0)");
+        ctx.fillStyle = g;
+        ctx.fillRect(0, earthTop - 10, w, h - earthTop + 10);
       }
+      ctx.restore();
+
+      ctx.globalCompositeOperation = "lighter";
+      ctx.fillStyle = s.limb;
+      ctx.beginPath();
+      ctx.arc(earthCx, earthCy, earthR * 1.07, 0, TAU);
+      ctx.fill();
+
+      if (glow > 0.001) {
+        const reach = w * 0.34;
+        const halo = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, reach);
+        halo.addColorStop(0, `rgba(255,248,225,${0.95 * glow})`);
+        halo.addColorStop(0.06, `rgba(255,214,150,${0.7 * glow})`);
+        halo.addColorStop(0.22, `rgba(255,140,60,${0.3 * glow})`);
+        halo.addColorStop(0.55, `rgba(90,140,255,${0.1 * glow})`);
+        halo.addColorStop(1, "rgba(40,90,255,0)");
+        ctx.fillStyle = halo;
+        ctx.fillRect(sunX - reach, sunY - reach, reach * 2, reach * 2);
+
+        const streak = ctx.createLinearGradient(sunX - reach * 1.4, 0, sunX + reach * 1.4, 0);
+        streak.addColorStop(0, "rgba(255,200,130,0)");
+        streak.addColorStop(0.5, `rgba(255,225,170,${0.5 * glow})`);
+        streak.addColorStop(1, "rgba(255,200,130,0)");
+        ctx.fillStyle = streak;
+        ctx.fillRect(sunX - reach * 1.4, sunY - 1, reach * 2.8, 2);
+      }
+      ctx.globalCompositeOperation = "source-over";
     };
 
-    const drawMeteors = () => {
+    const spawnEvents = (dt: number, s: Scene) => {
       if (time >= nextMeteor) {
-        const angle = (22 + Math.random() * 16) * (Math.PI / 180);
-        const speed = 520 + Math.random() * 380;
+        const angle = (18 + random() * 22) * (Math.PI / 180);
+        const speed = 520 + random() * 380;
         meteors.push({
-          x: w * (0.25 + Math.random() * 0.8),
-          y: Math.random() * h * 0.45,
+          x: s.w * (0.3 + random() * 0.8),
+          y: random() * s.h * 0.35,
           vx: -Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
           age: 0,
-          life: 0.9 + Math.random() * 0.6,
-          len: 90 + Math.random() * 120,
+          life: 0.6 + random() * 0.6,
+          length: 90 + random() * 150,
         });
-        nextMeteor = time + 2.5 + Math.random() * 5;
+        nextMeteor = time + 9 + random() * 14;
       }
 
+      if (time >= nextSatellite) {
+        const fromLeft = random() < 0.5;
+        const speed = 38 + random() * 22;
+        satellites.push({
+          x: fromLeft ? -20 : s.w + 20,
+          y: s.h * (0.08 + random() * 0.45),
+          vx: fromLeft ? speed : -speed,
+          vy: (random() - 0.5) * 8,
+          age: 0,
+          life: (s.w + 40) / speed,
+        });
+        nextSatellite = time + 22 + random() * 20;
+      }
+
+      if (time >= nextFlash) {
+        flashes.push({
+          x: s.w * (0.08 + random() * 0.84),
+          y: s.earthTop + (s.h - s.earthTop) * (0.2 + random() * 0.7),
+          age: 0,
+          size: 50 + random() * 90,
+        });
+        nextFlash = time + 3.5 + random() * 7;
+      }
+
+      for (const f of flashes) f.age += dt;
+    };
+
+    const drawMeteors = (dt: number) => {
       for (let i = meteors.length - 1; i >= 0; i--) {
         const m = meteors[i];
         if (!m) continue;
-        m.age += lastDt;
+        m.age += dt;
         if (m.age > m.life) {
           meteors.splice(i, 1);
           continue;
         }
-        m.x += m.vx * lastDt;
-        m.y += m.vy * lastDt;
+        m.x += m.vx * dt;
+        m.y += m.vy * dt;
         const fade = Math.sin((m.age / m.life) * Math.PI);
         const speed = Math.hypot(m.vx, m.vy);
-        const tx = m.x - (m.vx / speed) * m.len;
-        const ty = m.y - (m.vy / speed) * m.len;
+        const tx = m.x - (m.vx / speed) * m.length;
+        const ty = m.y - (m.vy / speed) * m.length;
         const g = ctx.createLinearGradient(m.x, m.y, tx, ty);
-        g.addColorStop(0, `rgba(255,255,255,${fade})`);
-        g.addColorStop(0.3, `rgba(120,230,245,${fade * 0.5})`);
-        g.addColorStop(1, "rgba(74,144,255,0)");
+        g.addColorStop(0, `rgba(255,255,255,${0.9 * fade})`);
+        g.addColorStop(0.2, `rgba(205,230,255,${0.45 * fade})`);
+        g.addColorStop(1, "rgba(120,170,255,0)");
         ctx.strokeStyle = g;
-        ctx.lineWidth = 1.6;
+        ctx.lineWidth = 1.2;
+        ctx.lineCap = "round";
         ctx.beginPath();
         ctx.moveTo(m.x, m.y);
         ctx.lineTo(tx, ty);
         ctx.stroke();
-        ctx.fillStyle = `rgba(255,255,255,${fade})`;
-        ctx.beginPath();
-        ctx.arc(m.x, m.y, 1.6, 0, TAU);
-        ctx.fill();
       }
     };
 
-    const drawRipples = () => {
-      for (let i = ripples.length - 1; i >= 0; i--) {
-        const r = ripples[i];
-        if (!r) continue;
-        r.age += lastDt;
-        if (r.age > 1.2) {
-          ripples.splice(i, 1);
+    const drawSatellites = (dt: number) => {
+      for (let i = satellites.length - 1; i >= 0; i--) {
+        const sat = satellites[i];
+        if (!sat) continue;
+        sat.age += dt;
+        if (sat.age > sat.life) {
+          satellites.splice(i, 1);
           continue;
         }
-        const p = r.age / 1.2;
-        ctx.strokeStyle = `rgba(74,144,255,${(1 - p) * 0.5})`;
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.arc(r.x, r.y, p * 160, 0, TAU);
-        ctx.stroke();
+        sat.x += sat.vx * dt;
+        sat.y += sat.vy * dt;
+        const edge = Math.min(sat.age, sat.life - sat.age);
+        const visibility = smoothstep(0, 2.5, edge);
+        const glint = 0.8 + 0.2 * Math.sin(sat.age * 1.3);
+        const alpha = visibility * glint;
+        const g = ctx.createRadialGradient(sat.x, sat.y, 0, sat.x, sat.y, 5);
+        g.addColorStop(0, `rgba(255,252,240,${alpha})`);
+        g.addColorStop(0.3, `rgba(255,240,210,${alpha * 0.35})`);
+        g.addColorStop(1, "rgba(255,240,210,0)");
+        ctx.fillStyle = g;
+        ctx.fillRect(sat.x - 5, sat.y - 5, 10, 10);
       }
     };
 
-    let lastDt = 0;
-
-    const render = (dt: number) => {
-      lastDt = dt;
+    function render(dt: number) {
+      const s = scene;
+      if (!s) return;
       time += dt;
-      const ease = Math.min(1, dt * 3);
-      pointer.x += (pointer.tx - pointer.x) * ease;
-      pointer.y += (pointer.ty - pointer.y) * ease;
-      warp = Math.max(0, warp - dt * 1.1);
 
-      ctx.clearRect(0, 0, w, h);
-      drawNebula();
-      drawStars();
-      drawPlanet();
+      ctx.globalCompositeOperation = "source-over";
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = BASE_COLOR;
+      ctx.fillRect(0, 0, s.w, s.h);
+
+      if (!reduced) spawnEvents(dt, s);
+      drawSky(s);
       if (!reduced) {
-        drawMeteors();
-        drawRipples();
+        ctx.globalCompositeOperation = "lighter";
+        drawMeteors(dt);
+        drawSatellites(dt);
+        ctx.globalCompositeOperation = "source-over";
       }
-    };
+      drawEarth(s);
 
-    const loop = (t: number) => {
-      const dt = Math.min((t - last) / 1000, 0.05);
-      last = t;
+      ctx.fillStyle = s.vignette;
+      ctx.fillRect(0, 0, s.w, s.h);
+    }
+
+    const loop = (now: number) => {
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
       render(dt);
       raf = requestAnimationFrame(loop);
     };
@@ -454,36 +474,29 @@ export function SpaceBackground() {
       raf = 0;
     };
 
-    const onMove = (e: PointerEvent) => {
-      pointer.tx = (e.clientX / w - 0.5) * 2;
-      pointer.ty = (e.clientY / h - 0.5) * 2;
-      pointer.px = e.clientX;
-      pointer.py = e.clientY;
-      pointer.lastMove = time;
-    };
-
-    const onDown = (e: PointerEvent) => {
-      warp = Math.min(1, warp + 0.55);
-      ripples.push({ x: e.clientX, y: e.clientY, age: 0 });
-    };
-
     const onVisibility = () => (document.hidden ? stop() : start());
 
-    resize();
+    time = 40 + random() * 200;
+    rebuild();
     start();
-    window.addEventListener("resize", resize);
-    window.addEventListener("pointermove", onMove, { passive: true });
-    window.addEventListener("pointerdown", onDown, { passive: true });
+    window.addEventListener("resize", scheduleRebuild);
     document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
       stop();
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerdown", onDown);
+      window.clearTimeout(rebuildTimer);
+      window.removeEventListener("resize", scheduleRebuild);
       document.removeEventListener("visibilitychange", onVisibility);
     };
   }, []);
 
-  return <canvas ref={canvasRef} aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 size-full" />;
+  return (
+    <>
+      <canvas ref={canvasRef} aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 size-full" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(ellipse_at_center,rgb(6_8_15/0.5),rgb(6_8_15/0.28))]"
+      />
+    </>
+  );
 }

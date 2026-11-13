@@ -45,5 +45,5 @@ export function pageTitleFor(pathname: string, role: Role): string {
   if (pathname.startsWith("/medical/profiles/")) return "Astronaut Profile";
   const items = navByRole[role];
   const match = [...items].sort((a, b) => b.to.length - a.to.length).find((i) => pathname === i.to || pathname.startsWith(i.to + "/"));
-  return match?.label ?? "ORBIT";
+  return match?.label ?? "AstroVitals";
 }

@@ -21,16 +21,16 @@ export function MissionStrip() {
   }, []);
 
   return (
-    <div className="flex h-8 items-center justify-between gap-4 border-b border-orbit-line bg-nasa-blue/40 px-4 font-mono text-[10px] uppercase tracking-[0.16em] text-white/80 backdrop-blur-md sm:px-6">
+    <div className="flex h-8 items-center justify-between gap-4 border-b border-orbit-line bg-nasa-blue/40 px-4 font-mono text-[10px] uppercase tracking-[0.16em] text-ink/80 backdrop-blur-md sm:px-6">
       <span className="flex min-w-0 items-center gap-2 truncate">
-        <span className="size-1.5 shrink-0 rounded-full bg-nasa-red shadow-[0_0_8px_#fc3d21]" aria-hidden="true" />
-        <span className="truncate">NASA Space Apps Challenge 2026</span>
-        <span className="hidden text-white/40 md:inline">/</span>
-        <span className="hidden text-white/60 md:inline">Simulated telemetry</span>
+        <span className="size-1.5 shrink-0 rounded-full bg-orbit-cyan" aria-hidden="true" />
+        <span className="truncate font-semibold tracking-[0.18em] text-ink">AstroVitals</span>
+        <span className="hidden text-ink/40 md:inline">/</span>
+        <span className="hidden text-ink/60 md:inline">Simulated telemetry</span>
       </span>
       <span className="shrink-0" aria-label="Mission elapsed time">
-        <span className="text-white/50">MET </span>
-        <span className="tabular-nums text-white">{formatElapsed(now - MISSION_EPOCH)}</span>
+        <span className="text-ink/50">MET </span>
+        <span className="tabular-nums text-ink">{formatElapsed(now - MISSION_EPOCH)}</span>
       </span>
     </div>
   );

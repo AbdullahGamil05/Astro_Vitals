@@ -41,7 +41,7 @@ export interface Astronaut {
   id: string;
   name: string;
   title: string;
-  email: string;
+  crewId: string;
   nationality: string;
   age: number;
   heightCm: number;
@@ -92,7 +92,7 @@ export interface MissionTask {
 }
 
 export interface DemoAccount {
-  email: string;
+  loginId: string;
   password: string;
   role: Role;
   name: string;

@@ -1,6 +1,6 @@
-import { useId } from "react";
-import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import type { ChartPoint } from "@/lib/monitoring/series";
+import { axisTick, chartTooltipStyle } from "@/components/charts/TrendChart";
 import { formatClock } from "@/lib/time";
 
 interface LiveChartProps {
@@ -15,13 +15,12 @@ interface LiveChartProps {
 }
 
 export function LiveChart({ points, color, name, unit, decimals, domain, baseline, height = 140 }: LiveChartProps) {
-  const gradientId = useId();
   const hasData = points.some((p) => p.value !== null);
 
   if (!hasData) {
     return (
       <div
-        className="flex items-center justify-center rounded-lg border border-dashed border-white/10 text-xs text-orbit-muted"
+        className="flex items-center justify-center rounded-lg border border-dashed border-white/15 font-mono text-xs text-orbit-muted"
         style={{ height }}
       >
         No data in this time window
@@ -32,47 +31,42 @@ export function LiveChart({ points, color, name, unit, decimals, domain, baselin
   return (
     <div style={{ height }} role="img" aria-label={`${name} chart over the selected time window`}>
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={points} margin={{ top: 6, right: 6, left: -22, bottom: 0 }}>
-          <defs>
-            <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={color} stopOpacity={0.35} />
-              <stop offset="100%" stopColor={color} stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <CartesianGrid stroke="rgb(255 255 255 / 0.06)" vertical={false} />
+        <LineChart data={points} margin={{ top: 6, right: 8, left: 0, bottom: 0 }}>
+          <CartesianGrid stroke="rgb(255 255 255 / 0.08)" vertical={false} />
           <XAxis
             dataKey="ts"
             type="number"
             scale="time"
             domain={["dataMin", "dataMax"]}
             tickFormatter={(v: number) => formatClock(v, false)}
-            tick={{ fill: "#7C8BA3", fontSize: 10 }}
+            tick={axisTick}
             tickLine={false}
             axisLine={false}
             tickCount={5}
             minTickGap={36}
           />
-          <YAxis domain={domain} tick={{ fill: "#7C8BA3", fontSize: 10 }} tickLine={false} axisLine={false} width={44} allowDataOverflow />
+          <YAxis domain={domain} tick={axisTick} tickLine={false} axisLine={false} width={38} allowDataOverflow />
           {baseline !== undefined ? (
-            <ReferenceLine y={baseline} stroke="rgb(255 255 255 / 0.35)" strokeDasharray="4 4" ifOverflow="hidden" />
+            <ReferenceLine y={baseline} stroke="rgb(255 255 255 / 0.4)" strokeDasharray="3 4" ifOverflow="hidden" />
           ) : null}
           <Tooltip
-            contentStyle={{ background: "#070D1A", border: "1px solid rgb(255 255 255 / 0.12)", borderRadius: 8, fontSize: 12 }}
-            labelStyle={{ color: "#9FB0C7" }}
+            contentStyle={chartTooltipStyle}
+            labelStyle={{ color: "#A3B1C6" }}
+            cursor={{ stroke: "rgb(255 255 255 / 0.2)", strokeDasharray: "3 3" }}
             labelFormatter={(v) => formatClock(Number(v))}
             formatter={(v) => [`${Number(v).toFixed(decimals)} ${unit}`, name]}
           />
-          <Area
-            type="monotone"
+          <Line
+            type="linear"
             dataKey="value"
             stroke={color}
-            strokeWidth={2}
-            fill={`url(#${gradientId})`}
+            strokeWidth={1.75}
             connectNulls={false}
             dot={false}
+            activeDot={{ r: 3, strokeWidth: 0, fill: color }}
             isAnimationActive={false}
           />
-        </AreaChart>
+        </LineChart>
       </ResponsiveContainer>
     </div>
   );

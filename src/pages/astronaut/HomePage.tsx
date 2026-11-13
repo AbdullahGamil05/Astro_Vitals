@@ -42,7 +42,7 @@ export function AstronautHomePage() {
             <Avatar name={me.name} from={me.avatarFrom} to={me.avatarTo} size={64} />
             <div>
               <p className="orbit-eyebrow">Crew console</p>
-              <h2 className="mt-1 text-2xl font-semibold text-white text-balance">Welcome back, {firstName}</h2>
+              <h2 className="mt-1 text-2xl font-semibold text-ink text-balance">Welcome back, {firstName}</h2>
               <p className="mt-1 text-sm text-orbit-muted">
                 {me.title} · {me.missionCode} {me.missionName}
               </p>
@@ -52,7 +52,7 @@ export function AstronautHomePage() {
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:min-w-[440px]">
             <div className="rounded-lg border border-orbit-line bg-black/20 p-3">
               <p className="orbit-eyebrow">Mission day</p>
-              <p className="mt-1 font-mono text-2xl font-semibold text-white">
+              <p className="mt-1 font-mono text-2xl font-semibold text-ink">
                 {me.missionDay}
                 <span className="text-sm text-orbit-dim"> / {me.missionTotalDays}</span>
               </p>
@@ -69,7 +69,7 @@ export function AstronautHomePage() {
             </div>
             <div className="col-span-2 rounded-lg border border-orbit-line bg-black/20 p-3 sm:col-span-1">
               <p className="orbit-eyebrow">Daily points</p>
-              <p className="mt-1 flex items-center gap-2 font-mono text-2xl font-semibold text-white">
+              <p className="mt-1 flex items-center gap-2 font-mono text-2xl font-semibold text-ink">
                 <Flame className="size-5 text-orbit-warn" aria-hidden="true" />
                 {earned}
               </p>
@@ -81,7 +81,7 @@ export function AstronautHomePage() {
 
       <section aria-labelledby="vitals-heading">
         <div className="mb-3 flex flex-wrap items-center gap-3">
-          <h2 id="vitals-heading" className="text-sm font-semibold text-white">
+          <h2 id="vitals-heading" className="text-sm font-semibold text-ink">
             Current vitals
           </h2>
           <SimulatedTag />
@@ -110,25 +110,25 @@ export function AstronautHomePage() {
               <p className="mb-1 flex items-center gap-1.5 text-xs font-medium text-orbit-muted">
                 <HeartPulse className="size-3.5 text-orbit-cyan" aria-hidden="true" /> Heart rate (bpm)
               </p>
-              <TrendChart data={me.hourly} xKey="label" dataKey="heartRate" color="#4A90FF" unit="bpm" name="Heart rate" domain={[50, 90]} height={160} />
+              <TrendChart data={me.hourly} xKey="label" dataKey="heartRate" color="#3B82F6" unit="bpm" name="Heart rate" domain={[50, 90]} height={160} />
             </div>
             <div>
               <p className="mb-1 flex items-center gap-1.5 text-xs font-medium text-orbit-muted">
                 <Droplets className="size-3.5 text-orbit-teal" aria-hidden="true" /> SpO2 (%)
               </p>
-              <TrendChart data={me.hourly} xKey="label" dataKey="spo2" color="#20C7A5" unit="%" name="SpO2" domain={[94, 100]} height={160} />
+              <TrendChart data={me.hourly} xKey="label" dataKey="spo2" color="#E2E8F0" unit="%" name="SpO2" domain={[94, 100]} height={160} />
             </div>
             <div>
               <p className="mb-1 flex items-center gap-1.5 text-xs font-medium text-orbit-muted">
                 <Thermometer className="size-3.5 text-orbit-warn" aria-hidden="true" /> Body temperature (°C)
               </p>
-              <TrendChart data={me.hourly} xKey="label" dataKey="temperature" color="#F59E42" unit="°C" name="Temperature" domain={[36, 37.5]} height={160} />
+              <TrendChart data={me.hourly} xKey="label" dataKey="temperature" color="#F97316" unit="°C" name="Temperature" domain={[36, 37.5]} height={160} />
             </div>
             <div>
               <p className="mb-1 flex items-center gap-1.5 text-xs font-medium text-orbit-muted">
-                <Wind className="size-3.5 text-[#8B9CF7]" aria-hidden="true" /> Respiratory rate (br/min)
+                <Wind className="size-3.5 text-[#94A3B8]" aria-hidden="true" /> Respiratory rate (br/min)
               </p>
-              <TrendChart data={me.hourly} xKey="label" dataKey="respiratoryRate" color="#8B9CF7" unit="br/min" name="Respiratory rate" domain={[10, 20]} height={160} />
+              <TrendChart data={me.hourly} xKey="label" dataKey="respiratoryRate" color="#94A3B8" unit="br/min" name="Respiratory rate" domain={[10, 20]} height={160} />
             </div>
           </div>
         </Card>
@@ -137,24 +137,24 @@ export function AstronautHomePage() {
           <Card>
             <CardHeader title="Sleep summary" subtitle="Last night" action={<SimulatedTag />} />
             <div className="flex items-center gap-4">
-              <span className="flex size-12 items-center justify-center rounded-xl bg-[#8B9CF7]/15 text-[#8B9CF7]">
+              <span className="flex size-12 items-center justify-center rounded-lg bg-[#94A3B8]/15 text-[#94A3B8]">
                 <Moon className="size-6" aria-hidden="true" />
               </span>
-              <p className="font-mono text-3xl font-semibold text-white">
+              <p className="font-mono text-3xl font-semibold text-ink">
                 {me.sleep.totalHours}
                 <span className="ml-1 text-sm text-orbit-muted">hours</span>
               </p>
             </div>
             <dl className="mt-4 space-y-3 text-sm">
               {[
-                { label: "Deep sleep", v: me.sleep.deepHours, max: 2.5, c: "#4A90FF", suffix: "h" },
-                { label: "REM sleep", v: me.sleep.remHours, max: 2.5, c: "#8B9CF7", suffix: "h" },
-                { label: "Sleep efficiency", v: me.sleep.efficiency, max: 100, c: "#20C7A5", suffix: "%" },
+                { label: "Deep sleep", v: me.sleep.deepHours, max: 2.5, c: "#3B82F6", suffix: "h" },
+                { label: "REM sleep", v: me.sleep.remHours, max: 2.5, c: "#94A3B8", suffix: "h" },
+                { label: "Sleep efficiency", v: me.sleep.efficiency, max: 100, c: "#E2E8F0", suffix: "%" },
               ].map((row) => (
                 <div key={row.label}>
                   <div className="mb-1 flex justify-between">
                     <dt className="text-orbit-muted">{row.label}</dt>
-                    <dd className="font-mono text-white">
+                    <dd className="font-mono text-ink">
                       {row.v}
                       {row.suffix}
                     </dd>
@@ -175,7 +175,7 @@ export function AstronautHomePage() {
                   <li key={a.id} className="flex gap-3">
                     <SeverityDot severity={a.severity} />
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-white">{a.title}</p>
+                      <p className="text-sm font-medium text-ink">{a.title}</p>
                       <p className="text-xs text-orbit-muted">{a.explanation}</p>
                       <p className="mt-0.5 font-mono text-[11px] text-orbit-dim">{a.timeLabel}</p>
                     </div>
@@ -193,10 +193,10 @@ export function AstronautHomePage() {
         <div className="space-y-6">
           <Card className="flex items-center gap-5">
             <ProgressRing value={progress}>
-              <span className="font-mono text-2xl font-semibold text-white">{progress}%</span>
+              <span className="font-mono text-2xl font-semibold text-ink">{progress}%</span>
             </ProgressRing>
             <div>
-              <h2 className="text-sm font-semibold text-white">Daily mission progress</h2>
+              <h2 className="text-sm font-semibold text-ink">Daily mission progress</h2>
               <p className="mt-1 text-xs leading-relaxed text-orbit-muted">
                 Complete today&apos;s tasks to build your streak and climb the leaderboard.
               </p>
@@ -225,7 +225,7 @@ export function AstronautHomePage() {
                     {e.rank === 1 ? <Trophy className="mx-auto size-4 text-orbit-warn" aria-label="First place" /> : e.rank}
                   </span>
                   <Avatar name={e.astronaut.name} from={e.astronaut.avatarFrom} to={e.astronaut.avatarTo} size={28} />
-                  <span className="min-w-0 flex-1 truncate text-sm text-white">{e.astronaut.name}</span>
+                  <span className="min-w-0 flex-1 truncate text-sm text-ink">{e.astronaut.name}</span>
                   <span className="font-mono text-sm text-orbit-cyan">{e.engagement.totalPoints}</span>
                 </li>
               ))}
