@@ -48,7 +48,8 @@ export const ORGAN_LAYOUT: Record<
   skeleton: { anchor: [0, 1.22, -0.05], focus: [0, 0.95, 0], distance: 2.7 },
 };
 
-export const HOME_VIEW = { target: [0, 0.92, 0] as [number, number, number], distance: 4.3 };
+// Target sits above the body's midpoint and the camera backs off so the whole head clears the HUD header.
+export const HOME_VIEW = { target: [0, 1.12, 0] as [number, number, number], distance: 4.6 };
 
 const RANK: Record<HealthStatus, number> = { stable: 0, warning: 1, critical: 2 };
 

@@ -165,6 +165,11 @@ function Metabolic() {
   );
 }
 
+// Leg joint centres measured from the model's A-pose (right-hand side, +x); mirrored for the left leg.
+const HIP = { x: 0.1, y: 0.92, z: 0 };
+const KNEE = { x: 0.168, y: 0.49, z: 0.004 };
+const ANKLE = { x: 0.228, y: 0.085, z: -0.01 };
+
 const SPINE_BASE = 0.92;
 const SPINE_TOP = 1.52;
 
@@ -201,8 +206,8 @@ function Skeleton() {
   const bones = useMemo(() => {
     const segs: Array<[[number, number, number], [number, number, number]]> = [];
     for (const s of [-1, 1]) {
-      segs.push([[s * 0.092, 0.92, 0], [s * 0.092, 0.5, 0.012]]);
-      segs.push([[s * 0.092, 0.5, 0.012], [s * 0.098, 0.085, 0]]);
+      segs.push([[s * HIP.x, HIP.y, HIP.z], [s * KNEE.x, KNEE.y, KNEE.z]]);
+      segs.push([[s * KNEE.x, KNEE.y, KNEE.z], [s * ANKLE.x, ANKLE.y, ANKLE.z]]);
       segs.push([[0.012 * s, 1.49, 0.02], [s * 0.19, 1.46, 0]]);
     }
     return segs.map(([a, b]) => {
@@ -219,9 +224,9 @@ function Skeleton() {
 
   const joints: Array<[number, number, number]> = [
     [-0.19, 1.46, 0], [0.19, 1.46, 0],
-    [-0.092, 0.92, 0], [0.092, 0.92, 0],
-    [-0.092, 0.5, 0.012], [0.092, 0.5, 0.012],
-    [-0.098, 0.085, 0], [0.098, 0.085, 0],
+    [-HIP.x, HIP.y, HIP.z], [HIP.x, HIP.y, HIP.z],
+    [-KNEE.x, KNEE.y, KNEE.z], [KNEE.x, KNEE.y, KNEE.z],
+    [-ANKLE.x, ANKLE.y, ANKLE.z], [ANKLE.x, ANKLE.y, ANKLE.z],
   ];
 
   return (
