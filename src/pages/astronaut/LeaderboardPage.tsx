@@ -153,7 +153,7 @@ export function LeaderboardPage() {
                 </div>
                 <div className="mt-3 flex items-center gap-3">
                   <div className="flex-1">
-                    <ProgressBar value={(b.value / b.def.target) * 100} color={b.unlocked ? "#20C7A5" : "#28C5D8"} />
+                    <ProgressBar value={(b.value / b.def.target) * 100} color={b.unlocked ? "#20C7A5" : "#4A90FF"} />
                   </div>
                   <span className="font-mono text-xs tabular-nums text-orbit-muted">
                     {b.value}/{b.def.target} {b.def.unit}

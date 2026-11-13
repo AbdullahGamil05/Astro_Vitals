@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { AwardAnnouncer } from "@/components/AwardAnnouncer";
+import { MissionStrip } from "@/components/MissionStrip";
 import { useAuth } from "@/lib/auth";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
@@ -12,7 +13,7 @@ export function AppShell() {
   if (!user) return null;
 
   return (
-    <div className="flex min-h-screen bg-orbit-bg">
+    <div className="flex min-h-screen">
       <Sidebar
         role={user.role}
         collapsed={collapsed}
@@ -21,6 +22,7 @@ export function AppShell() {
         onCloseMobile={() => setMobileOpen(false)}
       />
       <div className="flex min-w-0 flex-1 flex-col">
+        <MissionStrip />
         <Topbar onOpenMobileNav={() => setMobileOpen(true)} />
         <main className="mx-auto w-full max-w-[1400px] flex-1 p-4 sm:p-6">
           <Outlet />

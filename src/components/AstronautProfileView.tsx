@@ -120,7 +120,7 @@ export function AstronautProfileView({ astronaut: a, backTo }: { astronaut: Astr
           </div>
           <div>
             <p className="mb-1 text-xs font-medium text-orbit-muted">Resting heart rate (bpm)</p>
-            <TrendChart data={a.daily} xKey="label" dataKey="restingHeartRate" color="#28C5D8" unit="bpm" name="Resting HR" domain={["auto", "auto"]} height={170} interval={2} />
+            <TrendChart data={a.daily} xKey="label" dataKey="restingHeartRate" color="#4A90FF" unit="bpm" name="Resting HR" domain={["auto", "auto"]} height={170} interval={2} />
           </div>
           <div>
             <p className="mb-1 text-xs font-medium text-orbit-muted">Sleep (hours)</p>

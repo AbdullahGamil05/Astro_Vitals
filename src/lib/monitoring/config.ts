@@ -12,7 +12,7 @@ export interface LiveMetricMeta {
 }
 
 export const liveMetricMeta: Record<LiveMetric, LiveMetricMeta> = {
-  heartRate: { label: "Heart rate", unit: "bpm", decimals: 0, color: "#28C5D8", sensor: "Optical heart-rate sensor (wrist)", domain: [40, 140] },
+  heartRate: { label: "Heart rate", unit: "bpm", decimals: 0, color: "#4A90FF", sensor: "Optical heart-rate sensor (wrist)", domain: [40, 140] },
   spo2: { label: "Blood oxygen (SpO2)", unit: "%", decimals: 0, color: "#20C7A5", sensor: "Pulse oximeter (ear clip)", domain: [86, 100] },
   temperature: { label: "Body temperature", unit: "°C", decimals: 1, color: "#F59E42", sensor: "Skin temperature patch", domain: [35.5, 39] },
   respiratoryRate: { label: "Respiratory rate", unit: "br/min", decimals: 0, color: "#8B9CF7", sensor: "Respiration chest band", domain: [8, 28] },

@@ -43,7 +43,7 @@ export function StatCard({
   value,
   hint,
   icon: Icon,
-  color = "#28C5D8",
+  color = "#4A90FF",
 }: {
   label: string;
   value: string | number;

@@ -2,7 +2,7 @@ import { useId } from "react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 export const chartTooltipStyle = {
-  backgroundColor: "#0B1626",
+  backgroundColor: "#070D1A",
   border: "1px solid rgb(255 255 255 / 0.1)",
   borderRadius: 8,
   fontSize: 12,

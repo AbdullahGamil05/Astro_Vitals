@@ -57,7 +57,7 @@ export function LiveChart({ points, color, name, unit, decimals, domain, baselin
             <ReferenceLine y={baseline} stroke="rgb(255 255 255 / 0.35)" strokeDasharray="4 4" ifOverflow="hidden" />
           ) : null}
           <Tooltip
-            contentStyle={{ background: "#0B1626", border: "1px solid rgb(255 255 255 / 0.12)", borderRadius: 8, fontSize: 12 }}
+            contentStyle={{ background: "#070D1A", border: "1px solid rgb(255 255 255 / 0.12)", borderRadius: 8, fontSize: 12 }}
             labelStyle={{ color: "#9FB0C7" }}
             labelFormatter={(v) => formatClock(Number(v))}
             formatter={(v) => [`${Number(v).toFixed(decimals)} ${unit}`, name]}
