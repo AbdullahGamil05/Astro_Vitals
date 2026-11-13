@@ -40,7 +40,7 @@ export function Wordmark({ showText = true }: { showText?: boolean }) {
       <LogoMark />
       {showText ? (
         <span className="flex flex-col leading-none">
-          <span className="font-display text-xl font-semibold tracking-[0.2em] text-ink">ORBIT</span>
+          <span className="font-display text-xl font-semibold tracking-tight text-ink">AstroVitals</span>
           <span className="mt-1 font-mono text-[9px] uppercase tracking-[0.16em] text-orbit-dim">NASA Health Command</span>
         </span>
       ) : null}

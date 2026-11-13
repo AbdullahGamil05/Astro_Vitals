@@ -33,13 +33,9 @@ export function LoginPage() {
       <div className="relative w-full max-w-md">
         <div className="mb-8 flex flex-col items-center text-center">
           <LogoMark size={72} />
-          <h1 className="mt-4 font-display text-5xl font-semibold tracking-[0.22em] text-ink">ORBIT</h1>
+          <h1 className="mt-4 font-display text-5xl font-semibold tracking-tight text-ink">AstroVitals</h1>
           <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-nasa-red">NASA Health Command</p>
           <p className="mt-2 text-sm text-orbit-muted [text-shadow:0_1px_10px_#06080F]">Astronaut health monitoring and medical decision support</p>
-          <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-nasa-red/40 bg-nasa-red/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-ink">
-            <span className="size-1.5 rounded-full bg-nasa-red" aria-hidden="true" />
-            NASA Space Apps Challenge 2026
-          </p>
         </div>
 
         <div className="orbit-card orbit-glow p-6 sm:p-7">
