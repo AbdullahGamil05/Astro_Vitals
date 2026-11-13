@@ -72,7 +72,7 @@ export function AstronautProfileView({ astronaut: a, backTo }: { astronaut: Astr
               ["Blood type", a.bloodType],
               ["Height", `${a.heightCm} cm`],
               ["Weight", `${a.weightKg} kg`],
-              ["Email", a.email],
+              ["Crew ID", a.crewId],
             ]}
           />
         </Card>

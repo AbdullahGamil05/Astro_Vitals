@@ -3,7 +3,7 @@ import type { DemoAccount, HealthAlert, HealthEvent, MissionTask } from "./types
 
 export const demoAccounts: DemoAccount[] = [
   {
-    email: "astronaut@orbit.demo",
+    loginId: "ORBIT-A01",
     password: "demo123",
     role: "astronaut",
     name: "Elena Vasquez",
@@ -13,7 +13,7 @@ export const demoAccounts: DemoAccount[] = [
     avatarTo: "#2563EB",
   },
   {
-    email: "doctor@orbit.demo",
+    loginId: "ORBIT-M01",
     password: "demo123",
     role: "medical",
     name: "Dr. Marcus Reyes",

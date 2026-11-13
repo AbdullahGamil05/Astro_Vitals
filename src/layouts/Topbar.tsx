@@ -154,7 +154,7 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
             <div className="border-b border-orbit-line px-2 pb-3 pt-1">
               <p className="text-sm font-medium text-ink">{user.name}</p>
               <p className="text-xs text-orbit-muted">{user.title}</p>
-              <p className="mt-0.5 font-mono text-[11px] text-orbit-dim">{user.email}</p>
+              <p className="mt-0.5 font-mono text-[11px] text-orbit-dim">{user.loginId}</p>
             </div>
             <Link
               to={profilePath}

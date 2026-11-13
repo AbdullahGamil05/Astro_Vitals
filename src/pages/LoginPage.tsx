@@ -8,7 +8,7 @@ import { demoAccounts } from "@/data/operations";
 export function LoginPage() {
   const { user, login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -16,13 +16,13 @@ export function LoginPage() {
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    const result = login(email, password);
+    const result = login(loginId, password);
     if (result.ok) navigate(homePathFor(result.user.role), { replace: true });
     else setError(result.error);
   };
 
   const fill = (acc: (typeof demoAccounts)[number]) => {
-    setEmail(acc.email);
+    setLoginId(acc.loginId);
     setPassword(acc.password);
     setError(null);
   };
@@ -45,16 +45,16 @@ export function LoginPage() {
         <div className="orbit-card orbit-glow p-6 sm:p-7">
           <form onSubmit={submit} className="space-y-4" noValidate>
             <div>
-              <label htmlFor="email" className="mb-1.5 block text-xs font-medium text-orbit-muted">
-                Email
+              <label htmlFor="login-id" className="mb-1.5 block text-xs font-medium text-orbit-muted">
+                ID
               </label>
               <input
-                id="email"
-                type="email"
+                id="login-id"
+                type="text"
                 autoComplete="username"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="astronaut@orbit.demo"
+                value={loginId}
+                onChange={(e) => setLoginId(e.target.value)}
+                placeholder="ORBIT-A01"
                 className="w-full rounded-lg border border-orbit-line bg-orbit-bg px-3.5 py-2.5 text-sm text-ink placeholder:text-orbit-dim focus:border-orbit-cyan focus:outline-none"
               />
             </div>
@@ -96,7 +96,7 @@ export function LoginPage() {
                 const Icon = acc.role === "astronaut" ? UserRound : Stethoscope;
                 return (
                   <button
-                    key={acc.email}
+                    key={acc.loginId}
                     type="button"
                     onClick={() => fill(acc)}
                     className="flex items-center gap-3 rounded-lg border border-orbit-line bg-white/[0.02] px-3 py-2.5 text-left transition hover:border-orbit-cyan/40 hover:bg-orbit-cyan/5"
@@ -109,7 +109,7 @@ export function LoginPage() {
                         {acc.role === "astronaut" ? "Astronaut" : "Medical Officer"}
                       </span>
                       <span className="block truncate font-mono text-xs text-orbit-muted">
-                        {acc.email} · {acc.password}
+                        {acc.loginId} · {acc.password}
                       </span>
                     </span>
                   </button>
