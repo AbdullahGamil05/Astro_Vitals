@@ -3,20 +3,16 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { AppShell } from "@/layouts/AppShell";
 import { homePathFor, useAuth } from "@/lib/auth";
 import { LoginPage } from "@/pages/LoginPage";
+import { AiAnalysisPage } from "@/pages/astronaut/AiAnalysisPage";
+import { AssessmentPage } from "@/pages/astronaut/AssessmentPage";
 import { AstronautHomePage } from "@/pages/astronaut/HomePage";
+import { HistoryPage } from "@/pages/astronaut/HistoryPage";
+import { MonitoringPage } from "@/pages/astronaut/MonitoringPage";
+import { MedicalAlertsPage } from "@/pages/medical/AlertsPage";
 import { DirectoryPage } from "@/pages/medical/DirectoryPage";
 import { MedicalOverviewPage } from "@/pages/medical/OverviewPage";
 import { MedicalAstronautDetailPage, ProfilesPage } from "@/pages/medical/ProfilesPage";
-import {
-  AiAnalysisPage,
-  AssessmentPage,
-  HistoryPage,
-  LeaderboardPage,
-  MedicalAlertsPage,
-  MonitoringPage,
-  OwnProfilePage,
-  ReportsPage,
-} from "@/pages/placeholders";
+import { LeaderboardPage, OwnProfilePage, ReportsPage } from "@/pages/placeholders";
 
 function RootRedirect() {
   const { user } = useAuth();
