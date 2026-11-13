@@ -4,6 +4,7 @@ import { OrbitControls, useCursor } from "@react-three/drei";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import * as THREE from "three";
 import { HoloBody, createHoloMaterial } from "./HoloBody";
+import { MarsEnvironment, HORIZON_COLOR } from "./MarsEnvironment";
 import { Organs } from "./Organs";
 import { HOME_VIEW, ORGAN_LAYOUT, type OrganId, type OrganReport } from "./organs";
 
@@ -35,7 +36,7 @@ function CameraRig({ selected, hud }: { selected: OrganId | null; hud: HudRefs }
   useEffect(() => {
     const layout = selected ? ORGAN_LAYOUT[selected] : null;
     desired.target.set(...(layout ? layout.focus : HOME_VIEW.target));
-    desired.sph.setFromVector3(new THREE.Vector3(0.32, 0.1, 1).normalize().multiplyScalar(layout ? layout.distance : HOME_VIEW.distance));
+    desired.sph.setFromVector3(new THREE.Vector3(0.32, 0.04, 1).normalize().multiplyScalar(layout ? layout.distance : HOME_VIEW.distance));
     active.current = true;
   }, [selected, desired]);
 
@@ -176,8 +177,9 @@ function Stage({ reports, selected, onSelect, onModelMissing, hud, reducedMotion
 
   return (
     <>
-      <color attach="background" args={["#060912"]} />
-      <fog attach="fog" args={["#060912", 7, 14]} />
+      <color attach="background" args={["#05060e"]} />
+      <fog attach="fog" args={[HORIZON_COLOR, 8, 26]} />
+      <MarsEnvironment reducedMotion={reducedMotion} />
 
       <ambientLight intensity={0.35} color="#9db8ff" />
       <directionalLight position={[-2.5, 2.5, -3]} intensity={2.6} color="#4cc9ff" />
@@ -202,7 +204,7 @@ function Stage({ reports, selected, onSelect, onModelMissing, hud, reducedMotion
         minDistance={0.7}
         maxDistance={6.5}
         minPolarAngle={0.3}
-        maxPolarAngle={Math.PI - 0.5}
+        maxPolarAngle={1.72}
         autoRotate={!reducedMotion && !selected && !hovered}
         autoRotateSpeed={0.6}
       />
@@ -219,7 +221,7 @@ export default function Scene(props: SceneProps) {
   return (
     <Canvas
       dpr={[1, 2]}
-      camera={{ fov: 32, near: 0.1, far: 40, position: [0, 1.1, HOME_VIEW.distance] }}
+      camera={{ fov: 32, near: 0.1, far: 120, position: [0, 1.3, HOME_VIEW.distance] }}
       gl={{ antialias: true, powerPreference: "high-performance" }}
       onPointerMissed={() => props.onSelect(null)}
     >
