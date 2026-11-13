@@ -1,7 +1,9 @@
 import { ArrowLeft, ArrowRight, CheckCircle2, ShieldAlert } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { AiAssessmentSection } from "@/components/assessment/AiAssessmentSection";
 import { Card, ProgressRing } from "@/components/ui/primitives";
+import { loadStoredSession, type StoredSession } from "@/services/manus/storage";
 import type { PartialAnswers, SubmittedAssessment } from "@/data/monitoring";
 import { isComplete, isSectionComplete, moodLabel, questions, sections, type Question } from "@/lib/assessment";
 import { useAuth } from "@/lib/auth";
@@ -117,18 +119,34 @@ export function AssessmentPage() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<PartialAnswers>({});
   const [result, setResult] = useState<SubmittedAssessment | null>(null);
+  const [resumeSession, setResumeSession] = useState<StoredSession | null>(null);
+  const storedSession = id ? loadStoredSession(id) : null;
 
   if (!id) return null;
   if (result) {
     return (
-      <Confirmation
-        result={result}
-        onAgain={() => {
-          setResult(null);
-          setAnswers({});
-          setStep(0);
-        }}
-      />
+      <div className="mx-auto max-w-2xl space-y-4">
+        <Confirmation
+          result={result}
+          onAgain={() => {
+            setResult(null);
+            setAnswers({});
+            setStep(0);
+          }}
+        />
+        <AiAssessmentSection key={result.id} userId={id} assessment={result} />
+      </div>
+    );
+  }
+  if (resumeSession) {
+    return (
+      <div className="mx-auto max-w-2xl space-y-4">
+        <button type="button" onClick={() => setResumeSession(null)} className="inline-flex h-9 items-center gap-2 rounded-lg border border-white/10 px-3 text-sm text-ink hover:bg-white/5">
+          <ArrowLeft className="size-4" aria-hidden="true" />
+          Back to check-in
+        </button>
+        <AiAssessmentSection userId={id} resume={resumeSession} />
+      </div>
     );
   }
 
@@ -206,6 +224,21 @@ export function AssessmentPage() {
           <p className="mt-2 text-right text-xs text-orbit-muted">Answer every question to continue.</p>
         ) : null}
       </Card>
+
+      {storedSession ? (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-orbit-line bg-black/15 px-4 py-3">
+          <p className="text-sm text-orbit-muted">
+            Your latest AI health analysis from {formatDateTime(storedSession.createdAt)} is still available.
+          </p>
+          <button
+            type="button"
+            onClick={() => setResumeSession(storedSession)}
+            className="inline-flex h-9 items-center rounded-lg border border-white/15 px-3 text-sm text-ink hover:bg-white/5"
+          >
+            Open analysis
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }
