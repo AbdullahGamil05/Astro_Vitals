@@ -1,9 +1,10 @@
 import { Loader2, Sparkles } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnalysisView } from "@/components/AnalysisView";
+import { SleepRecoveryModel } from "@/components/sleep/SleepRecoveryModel";
 import { Card } from "@/components/ui/primitives";
 import { useAuth } from "@/lib/auth";
-import { useLive } from "@/lib/liveData";
+import { useAstronaut, useLive } from "@/lib/liveData";
 import { requestAnalysis, isRemoteConfigured, type AnalysisResult } from "@/services/ai/client";
 import type { AnalysisRequest } from "@/services/ai/schema";
 import { useAnalysisRequestBuilder } from "@/services/ai/useAnalysisRequest";
@@ -22,6 +23,7 @@ const sourceNote = {
 
 export function AiAnalysisPage() {
   const { user } = useAuth();
+  const astronaut = useAstronaut(user?.astronautId);
   const { completeTask } = useLive();
   const build = useAnalysisRequestBuilder(user?.astronautId);
   const [run, setRun] = useState<RunState>({ status: "idle" });
@@ -55,6 +57,8 @@ export function AiAnalysisPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-4">
+      {astronaut ? <SleepRecoveryModel key={astronaut.id} astronaut={astronaut} /> : null}
+
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
