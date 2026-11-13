@@ -1,34 +1,61 @@
 from __future__ import annotations
 
 import json
-import warnings
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-import joblib
 import numpy as np
 
-MODEL_DIR = Path(__file__).resolve().parent
+MODEL_PATH = Path(__file__).resolve().parent / "sleep_model.npz"
+
+
+class _SleepModel:
+    """numpy-only evaluation of StandardScaler -> PCA -> ExtraTreesClassifier.
+
+    Generated from the scikit-learn artifacts by scripts/export_sleep_model.py so the
+    serverless function does not need scikit-learn or scipy.
+    """
+
+    def __init__(self, archive: Any) -> None:
+        self.feature_names = [str(name) for name in archive["feature_names"]]
+        self.scaler_mean = archive["scaler_mean"]
+        self.scaler_scale = archive["scaler_scale"]
+        self.pca_mean = archive["pca_mean"]
+        self.pca_components = archive["pca_components"]
+        self.classes = archive["classes"]
+        self.left = archive["left"]
+        self.right = archive["right"]
+        self.feature = archive["feature"]
+        self.threshold = archive["threshold"]
+        self.value = archive["value"]
+        self.roots = archive["roots"]
+
+    def predict_proba(self, features: np.ndarray) -> np.ndarray:
+        scaled = (features - self.scaler_mean) / self.scaler_scale
+        projected = ((scaled - self.pca_mean) @ self.pca_components.T).astype(np.float32)
+        nodes = self.roots.copy()
+        while True:
+            go_left = projected[self.feature[nodes]] <= self.threshold[nodes]
+            next_nodes = np.where(go_left, self.left[nodes], self.right[nodes])
+            if np.array_equal(next_nodes, nodes):
+                break
+            nodes = next_nodes
+        return self.value[nodes].mean(axis=0, dtype=np.float64)
 
 
 @lru_cache(maxsize=1)
-def _load_models():
-    # These artifacts are checked into this repository; only load the bundled files.
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", UserWarning)
-        scaler = joblib.load(MODEL_DIR / "scaler.joblib")
-        pca = joblib.load(MODEL_DIR / "pca.joblib")
-        classifier = joblib.load(MODEL_DIR / "classifier.joblib")
-    return scaler, pca, classifier
+def _load_model() -> _SleepModel:
+    with np.load(MODEL_PATH, allow_pickle=False) as archive:
+        return _SleepModel(archive)
 
 
 def predict_features(features: Any) -> dict[str, Any]:
     if not isinstance(features, dict):
         raise ValueError("features must be an object of model input values")
 
-    scaler, pca, classifier = _load_models()
-    feature_names = [str(name) for name in scaler.feature_names_in_]
+    model = _load_model()
+    feature_names = model.feature_names
     expected = set(feature_names)
     supplied = set(features)
     missing = expected - supplied
@@ -47,23 +74,18 @@ def predict_features(features: Any) -> dict[str, Any]:
     for index, name in enumerate(feature_names):
         value = features.get(name)
         if value is None and name == "resting_hr" and resting_missing:
-            values.append(float(scaler.mean_[index]))
+            values.append(float(model.scaler_mean[index]))
             continue
         if isinstance(value, bool) or not isinstance(value, (int, float)) or not np.isfinite(value):
             raise ValueError(f"{name} must be a finite number")
         values.append(float(value))
 
-    row = np.asarray([values], dtype=np.float64)
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", UserWarning)
-        scaled = scaler.transform(row)
-        projected = pca.transform(scaled)
-        prediction = int(classifier.predict(projected)[0])
-        probabilities = classifier.predict_proba(projected)[0]
+    probabilities = model.predict_proba(np.asarray(values, dtype=np.float64))
+    prediction = int(model.classes[int(np.argmax(probabilities))])
 
     return {
         "prediction": prediction,
-        "probabilities": {str(int(label)): float(probability) for label, probability in zip(classifier.classes_, probabilities)},
+        "probabilities": {str(int(label)): float(probability) for label, probability in zip(model.classes, probabilities)},
         "feature_count": len(feature_names),
         "model": "ExtraTreesClassifier + StandardScaler + PCA",
     }
