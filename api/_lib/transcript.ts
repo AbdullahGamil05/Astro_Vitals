@@ -26,8 +26,10 @@ const ASK_USER_TYPES = new Set(["messageAskUser", "cascadeAskUser"]);
 
 function visibleUserText(raw: string): string | null {
   if (raw.includes(SESSION_MARKER)) return null;
-  const start = raw.indexOf(USER_OPEN);
+  // The user's text is sanitized of these tags, so the last open tag is the real delimiter.
+  // Older prompts also mentioned the tag inside the reminder sentence, which the first match would hit.
   const end = raw.lastIndexOf(USER_CLOSE);
+  const start = end === -1 ? -1 : raw.lastIndexOf(USER_OPEN, end);
   if (start !== -1 && end > start) return raw.slice(start + USER_OPEN.length, end).trim();
   return raw.trim();
 }
