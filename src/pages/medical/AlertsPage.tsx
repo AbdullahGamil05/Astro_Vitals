@@ -30,7 +30,7 @@ function Segmented<T extends string>({
         {options.map((o) => (
           <label key={o.id} className="cursor-pointer">
             <input type="radio" name={name} className="peer sr-only" checked={value === o.id} onChange={() => onChange(o.id)} />
-            <span className="inline-flex rounded-md px-3 py-1.5 text-sm text-orbit-muted peer-checked:bg-white/10 peer-checked:text-white peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-orbit-cyan">
+            <span className="inline-flex rounded-md px-3 py-1.5 text-sm text-orbit-muted peer-checked:bg-white/10 peer-checked:text-ink peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-orbit-cyan">
               {o.label}
             </span>
           </label>
@@ -70,7 +70,7 @@ export function MedicalAlertsPage() {
         {stat("Active critical", active.filter((a) => a.severity === "critical").length, "text-orbit-crit")}
         {stat("Active warnings", active.filter((a) => a.severity === "warning").length, "text-orbit-warn")}
         {stat("Awaiting acknowledgement", active.filter((a) => !a.acknowledged).length, "text-orbit-cyan")}
-        {stat("Resolved", alerts.filter((a) => !a.active).length, "text-white")}
+        {stat("Resolved", alerts.filter((a) => !a.active).length, "text-ink")}
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
@@ -85,7 +85,7 @@ export function MedicalAlertsPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search astronaut or alert"
-            className="h-10 w-full rounded-lg border border-white/10 bg-transparent pl-9 pr-3 text-sm text-white placeholder:text-orbit-dim focus-visible:outline focus-visible:outline-2 focus-visible:outline-orbit-cyan"
+            className="h-10 w-full rounded-lg border border-white/10 bg-transparent pl-9 pr-3 text-sm text-ink placeholder:text-orbit-dim focus-visible:outline focus-visible:outline-2 focus-visible:outline-orbit-cyan"
           />
         </div>
         <Segmented
@@ -130,7 +130,7 @@ export function MedicalAlertsPage() {
                 footer={<CaseManager alert={a} />}
                 header={
                   person ? (
-                    <Link to={`/medical/astronauts/${person.id}`} className="inline-flex items-center gap-2 text-sm text-white hover:underline">
+                    <Link to={`/medical/astronauts/${person.id}`} className="inline-flex items-center gap-2 text-sm text-ink hover:underline">
                       <Avatar name={person.name} from={person.avatarFrom} to={person.avatarTo} size={24} />
                       {person.name}
                     </Link>

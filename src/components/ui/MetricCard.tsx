@@ -15,23 +15,20 @@ export function VitalCard({
   const meta = metricMeta[kind];
   const status = metricStatus(kind, value);
   return (
-    <div className="orbit-card relative overflow-hidden p-4">
-      <div
-        className="pointer-events-none absolute -right-8 -top-8 size-24 rounded-full opacity-20 blur-2xl"
-        style={{ backgroundColor: statusColor[status] }}
-      />
+    <div className="orbit-card p-5">
       <div className="flex items-center justify-between">
-        <span className="flex items-center gap-2 text-xs font-medium text-orbit-muted">
-          <Icon className="size-4" style={{ color: statusColor[status] }} aria-hidden="true" />
+        <span className="flex items-center gap-2 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-orbit-muted">
+          <Icon className="size-3.5 text-orbit-dim" aria-hidden="true" />
           {meta.label}
         </span>
         <SimulatedTag />
       </div>
-      <p className="mt-3 flex items-baseline gap-1.5">
-        <span className="font-mono text-3xl font-semibold tabular-nums text-white">{value.toFixed(meta.decimals)}</span>
-        <span className="text-sm text-orbit-muted">{meta.unit}</span>
+      <p className="mt-5 flex items-baseline gap-1.5">
+        <span className="font-mono text-4xl font-medium tabular-nums tracking-tight text-ink">{value.toFixed(meta.decimals)}</span>
+        <span className="font-mono text-xs text-orbit-muted">{meta.unit}</span>
       </p>
-      <p className={cn("mt-1 text-xs font-medium capitalize", statusText[status])}>
+      <p className={cn("mt-3 flex items-center gap-2 text-xs font-medium", statusText[status])}>
+        <span className="size-1.5 rounded-full" style={{ backgroundColor: statusColor[status] }} />
         {status === "stable" ? "Within range" : status === "warning" ? "Outside range" : "Critical range"}
       </p>
     </div>
@@ -43,7 +40,7 @@ export function StatCard({
   value,
   hint,
   icon: Icon,
-  color = "#4A90FF",
+  color = "#3B82F6",
 }: {
   label: string;
   value: string | number;
@@ -52,22 +49,13 @@ export function StatCard({
   color?: string;
 }) {
   return (
-    <div className="orbit-card relative overflow-hidden p-5">
-      <div
-        className="pointer-events-none absolute -right-10 -top-10 size-28 rounded-full opacity-15 blur-2xl"
-        style={{ backgroundColor: color }}
-      />
+    <div className="orbit-card p-6">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-orbit-muted">{label}</span>
-        <span
-          className="flex size-8 items-center justify-center rounded-lg"
-          style={{ backgroundColor: `${color}1f`, color }}
-        >
-          <Icon className="size-4" aria-hidden="true" />
-        </span>
+        <span className="font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-orbit-muted">{label}</span>
+        <Icon className="size-4" style={{ color }} aria-hidden="true" />
       </div>
-      <p className="mt-3 font-mono text-3xl font-semibold tabular-nums text-white">{value}</p>
-      {hint ? <p className="mt-1 text-xs text-orbit-muted">{hint}</p> : null}
+      <p className="mt-5 font-mono text-4xl font-medium tabular-nums tracking-tight text-ink">{value}</p>
+      {hint ? <p className="mt-3 border-t border-white/10 pt-3 text-xs text-orbit-muted">{hint}</p> : null}
     </div>
   );
 }

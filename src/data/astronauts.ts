@@ -92,7 +92,7 @@ export const astronauts: Astronaut[] = [
     lastMeasurement: "6 min ago",
     lastAssessment: "Today, 07:30 UTC",
     points: 1240,
-    avatarFrom: "#4A90FF",
+    avatarFrom: "#3B82F6",
     avatarTo: "#2563EB",
     hourly: buildHourly(
       { heartRate: 64, spo2: 98, temperature: 36.7, respiratoryRate: 14 },
@@ -130,7 +130,7 @@ export const astronauts: Astronaut[] = [
     lastMeasurement: "9 min ago",
     lastAssessment: "Today, 07:42 UTC",
     points: 1185,
-    avatarFrom: "#20C7A5",
+    avatarFrom: "#3FBF9F",
     avatarTo: "#0E7490",
     hourly: buildHourly(
       { heartRate: 68, spo2: 97, temperature: 36.8, respiratoryRate: 15 },
@@ -167,7 +167,7 @@ export const astronauts: Astronaut[] = [
     lastMeasurement: "4 min ago",
     lastAssessment: "Today, 07:55 UTC",
     points: 1090,
-    avatarFrom: "#F59E42",
+    avatarFrom: "#F97316",
     avatarTo: "#DB2777",
     hourly: buildHourly(
       { heartRate: 102, spo2: 94, temperature: 37.3, respiratoryRate: 20 },
@@ -205,7 +205,7 @@ export const astronauts: Astronaut[] = [
     lastMeasurement: "1 min ago",
     lastAssessment: "Yesterday, 19:10 UTC",
     points: 760,
-    avatarFrom: "#F0524F",
+    avatarFrom: "#EF4444",
     avatarTo: "#7C3AED",
     hourly: buildHourly(
       { heartRate: 124, spo2: 90, temperature: 38.2, respiratoryRate: 26 },
@@ -243,7 +243,7 @@ export const astronauts: Astronaut[] = [
     lastAssessment: "Today, 08:05 UTC",
     points: 1010,
     avatarFrom: "#8B5CF6",
-    avatarTo: "#4A90FF",
+    avatarTo: "#3B82F6",
     hourly: buildHourly(
       { heartRate: 71, spo2: 98, temperature: 36.6, respiratoryRate: 15 },
       {

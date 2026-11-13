@@ -35,7 +35,7 @@ function Measurements({ id }: { id: string }) {
           <select
             value={metric}
             onChange={(e) => setMetric(e.target.value as LiveMetric)}
-            className="h-9 rounded-lg border border-white/10 bg-orbit-card-2 px-3 text-sm text-white"
+            className="h-9 rounded-lg border border-white/10 bg-orbit-card-2 px-3 text-sm text-ink"
           >
             {LIVE_METRICS.map((m) => (
               <option key={m} value={m}>
@@ -48,7 +48,7 @@ function Measurements({ id }: { id: string }) {
           {windows.map((w) => (
             <label key={w} className="cursor-pointer">
               <input type="radio" name="history-window" className="peer sr-only" checked={window === w} onChange={() => setWindow(w)} />
-              <span className="inline-flex rounded-md px-3 py-1.5 text-sm text-orbit-muted peer-checked:bg-white/10 peer-checked:text-white peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-orbit-cyan">
+              <span className="inline-flex rounded-md px-3 py-1.5 text-sm text-orbit-muted peer-checked:bg-white/10 peer-checked:text-ink peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-orbit-cyan">
                 {WINDOW_LABEL[w]}
               </span>
             </label>
@@ -77,7 +77,7 @@ function Measurements({ id }: { id: string }) {
             ].map(([label, v]) => (
               <div key={label as string} className="rounded-lg bg-white/[0.04] p-3">
                 <dt className="text-xs text-orbit-muted">{label as string}</dt>
-                <dd className="mt-0.5 font-mono text-lg font-semibold tabular-nums text-white">
+                <dd className="mt-0.5 font-mono text-lg font-semibold tabular-nums text-ink">
                   {formatMetric(metric, v as number)} <span className="text-xs font-normal text-orbit-muted">{meta.unit}</span>
                 </dd>
               </div>
@@ -102,7 +102,7 @@ function Measurements({ id }: { id: string }) {
               {recent.map((r) => (
                 <tr key={r.ts} className="border-t border-orbit-line">
                   <td className="py-2 font-mono text-orbit-muted">{formatClock(r.ts)}</td>
-                  <td className="py-2 font-mono tabular-nums text-white">{r[metric] === null ? "No data" : `${formatMetric(metric, r[metric])} ${meta.unit}`}</td>
+                  <td className="py-2 font-mono tabular-nums text-ink">{r[metric] === null ? "No data" : `${formatMetric(metric, r[metric])} ${meta.unit}`}</td>
                   <td className="py-2 text-orbit-muted">{r[metric] === null ? "Lost" : `${r.quality[metric]}%`}</td>
                 </tr>
               ))}
@@ -125,12 +125,12 @@ function Assessments({ id }: { id: string }) {
       {submitted.map((a) => (
         <Card key={a.id}>
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="text-sm font-semibold text-white">Daily check-in</h3>
+            <h3 className="text-sm font-semibold text-ink">Daily check-in</h3>
             <span className="text-xs text-orbit-muted">{formatDateTime(a.submittedAt)}</span>
           </div>
           <p className="mt-1 text-sm text-orbit-muted">{assessmentSummary(a)}</p>
           <p className="mt-2 text-xs text-orbit-muted">
-            Wellness score <span className="font-mono font-semibold text-white">{a.score}</span>
+            Wellness score <span className="font-mono font-semibold text-ink">{a.score}</span>
             {a.escalation !== "none" ? ` · ${a.escalation === "urgent" ? "Urgent review" : "Flagged for review"}` : ""}
           </p>
         </Card>
@@ -138,12 +138,12 @@ function Assessments({ id }: { id: string }) {
       {me.assessments.map((a) => (
         <Card key={a.id}>
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="text-sm font-semibold text-white">{a.type}</h3>
+            <h3 className="text-sm font-semibold text-ink">{a.type}</h3>
             <span className="text-xs text-orbit-muted">{a.date}</span>
           </div>
           <p className="mt-1 text-sm text-orbit-muted">{a.summary}</p>
           <p className="mt-2 text-xs text-orbit-muted">
-            Wellness score <span className="font-mono font-semibold text-white">{a.score}</span> · Mood {a.mood}
+            Wellness score <span className="font-mono font-semibold text-ink">{a.score}</span> · Mood {a.mood}
           </p>
         </Card>
       ))}
@@ -184,7 +184,7 @@ export function HistoryPage() {
             onClick={() => setTab(t.id)}
             className={cn(
               "rounded-md px-4 py-1.5 text-sm transition-colors",
-              tab === t.id ? "bg-white/10 text-white" : "text-orbit-muted hover:text-white",
+              tab === t.id ? "bg-white/10 text-ink" : "text-orbit-muted hover:text-ink",
             )}
           >
             {t.label}

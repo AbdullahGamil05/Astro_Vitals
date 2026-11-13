@@ -33,10 +33,10 @@ export function LoginPage() {
       <div className="relative w-full max-w-md">
         <div className="mb-8 flex flex-col items-center text-center">
           <LogoMark size={72} />
-          <h1 className="mt-4 font-display text-5xl font-bold tracking-[0.3em] text-white">ORBIT</h1>
+          <h1 className="mt-4 font-display text-5xl font-semibold tracking-[0.22em] text-ink">ORBIT</h1>
           <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-nasa-red">NASA Health Command</p>
-          <p className="mt-2 text-sm text-orbit-muted">Astronaut health monitoring and medical decision support</p>
-          <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-nasa-red/40 bg-nasa-red/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-white">
+          <p className="mt-2 text-sm text-orbit-muted [text-shadow:0_1px_10px_#06080F]">Astronaut health monitoring and medical decision support</p>
+          <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-nasa-red/40 bg-nasa-red/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-ink">
             <span className="size-1.5 rounded-full bg-nasa-red" aria-hidden="true" />
             NASA Space Apps Challenge 2026
           </p>
@@ -55,7 +55,7 @@ export function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="astronaut@orbit.demo"
-                className="w-full rounded-lg border border-orbit-line bg-orbit-bg px-3.5 py-2.5 text-sm text-white placeholder:text-orbit-dim focus:border-orbit-cyan focus:outline-none"
+                className="w-full rounded-lg border border-orbit-line bg-orbit-bg px-3.5 py-2.5 text-sm text-ink placeholder:text-orbit-dim focus:border-orbit-cyan focus:outline-none"
               />
             </div>
             <div>
@@ -69,7 +69,7 @@ export function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="demo123"
-                className="w-full rounded-lg border border-orbit-line bg-orbit-bg px-3.5 py-2.5 text-sm text-white placeholder:text-orbit-dim focus:border-orbit-cyan focus:outline-none"
+                className="w-full rounded-lg border border-orbit-line bg-orbit-bg px-3.5 py-2.5 text-sm text-ink placeholder:text-orbit-dim focus:border-orbit-cyan focus:outline-none"
               />
             </div>
 
@@ -82,7 +82,7 @@ export function LoginPage() {
 
             <button
               type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-nasa-blue px-4 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-white shadow-[0_0_24px_-6px_#0b3d91] transition hover:bg-nasa-blue-light"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-orbit-cyan px-4 py-2.5 text-sm font-semibold tracking-tight text-ink transition hover:bg-nasa-blue-light"
             >
               Sign in to mission console
               <ArrowRight className="size-4" aria-hidden="true" />
@@ -105,7 +105,7 @@ export function LoginPage() {
                       <Icon className="size-4" aria-hidden="true" />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block text-sm font-medium text-white">
+                      <span className="block text-sm font-medium text-ink">
                         {acc.role === "astronaut" ? "Astronaut" : "Medical Officer"}
                       </span>
                       <span className="block truncate font-mono text-xs text-orbit-muted">
@@ -119,7 +119,7 @@ export function LoginPage() {
           </div>
         </div>
 
-        <p className="mt-5 flex items-start justify-center gap-2 text-center text-xs text-orbit-dim">
+        <p className="mt-5 flex items-start justify-center gap-2 rounded-md bg-[#06080F]/80 px-3 py-2 text-center text-xs text-orbit-muted backdrop-blur-sm">
           <ShieldAlert className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
           Demo authentication for prototype purposes only. Not secure. All health data is simulated.
         </p>

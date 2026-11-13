@@ -11,8 +11,8 @@ import {
 } from "./space/sky";
 
 /** Radians per second: the whole sky turns slowly, like a long-exposure from orbit. */
-const SKY_ROTATION_SPEED = 0.0045;
-const EARTH_SCROLL_SPEED = 9;
+const SKY_ROTATION_SPEED = 0.003;
+const EARTH_SCROLL_SPEED = 6;
 const SUNRISE_PERIOD = 120;
 const BASE_COLOR = "#02050d";
 
@@ -490,5 +490,13 @@ export function SpaceBackground() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 size-full" />;
+  return (
+    <>
+      <canvas ref={canvasRef} aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 size-full" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(ellipse_at_center,rgb(6_8_15/0.5),rgb(6_8_15/0.28))]"
+      />
+    </>
+  );
 }

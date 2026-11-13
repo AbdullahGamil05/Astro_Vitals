@@ -9,7 +9,7 @@ export const demoAccounts: DemoAccount[] = [
     name: "Elena Vasquez",
     title: "Mission Commander",
     astronautId: "a1",
-    avatarFrom: "#4A90FF",
+    avatarFrom: "#3B82F6",
     avatarTo: "#2563EB",
   },
   {
@@ -18,7 +18,7 @@ export const demoAccounts: DemoAccount[] = [
     role: "medical",
     name: "Dr. Marcus Reyes",
     title: "Flight Surgeon",
-    avatarFrom: "#20C7A5",
+    avatarFrom: "#3FBF9F",
     avatarTo: "#0E7490",
   },
 ];

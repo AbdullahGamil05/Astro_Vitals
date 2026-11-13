@@ -30,9 +30,9 @@ export function metricStatus(kind: MetricKind, value: number): HealthStatus {
 }
 
 export const statusColor: Record<HealthStatus, string> = {
-  stable: "#20C7A5",
-  warning: "#F59E42",
-  critical: "#F0524F",
+  stable: "#3FBF9F",
+  warning: "#F97316",
+  critical: "#EF4444",
 };
 
 export const statusText: Record<HealthStatus, string> = {

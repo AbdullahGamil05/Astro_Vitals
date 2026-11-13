@@ -19,8 +19,8 @@ function Choice({ q, value, onChange }: { q: Question; value: number | boolean |
       : [1, 2, 3, 4, 5].map((n) => ({ label: String(n), value: n }));
 
   return (
-    <fieldset className="rounded-xl border border-orbit-line bg-black/15 p-4">
-      <legend className="px-1 text-sm font-medium text-white">{q.prompt}</legend>
+    <fieldset className="rounded-lg border border-orbit-line bg-black/15 p-4">
+      <legend className="px-1 text-sm font-medium text-ink">{q.prompt}</legend>
       <div className={cn("mt-2 flex gap-2", q.kind === "yesno" && "max-w-xs")}>
         {options.map((o) => (
           <label key={String(o.value)} className="flex-1 cursor-pointer">
@@ -31,7 +31,7 @@ function Choice({ q, value, onChange }: { q: Question; value: number | boolean |
               checked={value === o.value}
               onChange={() => onChange(o.value)}
             />
-            <span className="flex h-11 items-center justify-center rounded-lg border border-white/10 text-sm font-medium text-orbit-muted transition-colors hover:text-white peer-checked:border-orbit-cyan peer-checked:bg-orbit-cyan/15 peer-checked:text-white peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-orbit-cyan">
+            <span className="flex h-11 items-center justify-center rounded-lg border border-white/10 text-sm font-medium text-orbit-muted transition-colors hover:text-ink peer-checked:border-orbit-cyan peer-checked:bg-orbit-cyan/15 peer-checked:text-ink peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-orbit-cyan">
               {o.label}
             </span>
           </label>
@@ -70,7 +70,7 @@ function Confirmation({ result, onAgain }: { result: SubmittedAssessment; onAgai
     <Card glow className="mx-auto max-w-2xl">
       <div className="flex flex-col items-center gap-5 text-center sm:flex-row sm:text-left">
         <ProgressRing value={result.score}>
-          <span className="font-mono text-2xl font-semibold text-white">{result.score}</span>
+          <span className="font-mono text-2xl font-semibold text-ink">{result.score}</span>
           <span className="text-[10px] uppercase tracking-wider text-orbit-muted">Wellness</span>
         </ProgressRing>
         <div>
@@ -98,10 +98,10 @@ function Confirmation({ result, onAgain }: { result: SubmittedAssessment; onAgai
         <Link to="/astronaut/ai-analysis" className="inline-flex h-10 items-center rounded-lg bg-orbit-cyan px-4 text-sm font-semibold text-orbit-bg hover:bg-orbit-cyan/90">
           Run AI analysis
         </Link>
-        <Link to="/astronaut/history" className="inline-flex h-10 items-center rounded-lg border border-white/15 px-4 text-sm text-white hover:bg-white/5">
+        <Link to="/astronaut/history" className="inline-flex h-10 items-center rounded-lg border border-white/15 px-4 text-sm text-ink hover:bg-white/5">
           View health history
         </Link>
-        <button type="button" onClick={onAgain} className="inline-flex h-10 items-center rounded-lg px-3 text-sm text-orbit-muted hover:text-white">
+        <button type="button" onClick={onAgain} className="inline-flex h-10 items-center rounded-lg px-3 text-sm text-orbit-muted hover:text-ink">
           Submit another check-in
         </button>
       </div>
@@ -154,14 +154,14 @@ export function AssessmentPage() {
             >
               {i < step ? "✓" : i + 1}
             </span>
-            <span className={cn("text-sm", i === step ? "text-white" : "text-orbit-muted")}>{s.title}</span>
+            <span className={cn("text-sm", i === step ? "text-ink" : "text-orbit-muted")}>{s.title}</span>
             {i < sections.length - 1 ? <span className="h-px flex-1 bg-white/10" aria-hidden="true" /> : null}
           </li>
         ))}
       </ol>
 
       <Card>
-        <h2 className="text-base font-semibold text-white">{section.title}</h2>
+        <h2 className="text-base font-semibold text-ink">{section.title}</h2>
         <p className="mt-0.5 text-sm text-orbit-muted">{section.description}</p>
         {previous ? <p className="mt-2 text-xs text-orbit-dim">Last check-in: {formatDateTime(previous.submittedAt)}</p> : null}
 
@@ -176,7 +176,7 @@ export function AssessmentPage() {
             type="button"
             onClick={() => setStep((s) => s - 1)}
             disabled={step === 0}
-            className="inline-flex h-10 items-center gap-2 rounded-lg border border-white/10 px-4 text-sm text-white transition-colors hover:bg-white/5 disabled:invisible"
+            className="inline-flex h-10 items-center gap-2 rounded-lg border border-white/10 px-4 text-sm text-ink transition-colors hover:bg-white/5 disabled:invisible"
           >
             <ArrowLeft className="size-4" aria-hidden="true" />
             Back

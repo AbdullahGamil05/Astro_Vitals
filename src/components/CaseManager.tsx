@@ -67,7 +67,7 @@ export function CaseManager({ alert }: { alert: UnifiedAlert }) {
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
           aria-controls={panelId}
-          className="ml-auto inline-flex h-9 items-center gap-2 rounded-lg border border-white/10 px-3 text-sm text-orbit-muted transition-colors hover:bg-white/5 hover:text-white"
+          className="ml-auto inline-flex h-9 items-center gap-2 rounded-lg border border-white/10 px-3 text-sm text-orbit-muted transition-colors hover:bg-white/5 hover:text-ink"
         >
           <NotebookPen className="size-4" aria-hidden="true" />
           Follow-up and notes{notes.length ? ` (${notes.length})` : ""}
@@ -88,7 +88,7 @@ export function CaseManager({ alert }: { alert: UnifiedAlert }) {
                 setFollowUp(alert.id, e.target.value as FollowUpStatus);
                 toast("Follow-up updated", { detail: followUpLabel[e.target.value as FollowUpStatus] });
               }}
-              className="h-9 w-full max-w-xs rounded-lg border border-white/10 bg-orbit-side px-3 text-sm text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-orbit-cyan"
+              className="h-9 w-full max-w-xs rounded-lg border border-white/10 bg-orbit-side px-3 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-orbit-cyan"
             >
               {followUpOptions.map((o) => (
                 <option key={o} value={o}>
@@ -115,7 +115,7 @@ export function CaseManager({ alert }: { alert: UnifiedAlert }) {
               aria-invalid={error ? true : undefined}
               aria-describedby={error ? `${noteId}-error` : undefined}
               placeholder="Observations, decisions or instructions for the crew member"
-              className="w-full rounded-lg border border-white/10 bg-orbit-side px-3 py-2 text-sm text-white placeholder:text-orbit-dim focus-visible:outline focus-visible:outline-2 focus-visible:outline-orbit-cyan"
+              className="w-full rounded-lg border border-white/10 bg-orbit-side px-3 py-2 text-sm text-ink placeholder:text-orbit-dim focus-visible:outline focus-visible:outline-2 focus-visible:outline-orbit-cyan"
             />
             <div className="mt-1.5 flex items-center justify-between gap-3">
               <p id={`${noteId}-error`} className="text-xs text-orbit-crit" role={error ? "alert" : undefined}>

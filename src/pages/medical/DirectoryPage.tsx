@@ -39,7 +39,7 @@ export function DirectoryPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search by name, mission or status"
-            className="w-full rounded-lg border border-orbit-line bg-orbit-card py-2.5 pl-9 pr-3 text-sm text-white placeholder:text-orbit-dim focus:border-orbit-cyan focus:outline-none"
+            className="w-full rounded-lg border border-orbit-line bg-orbit-card py-2.5 pl-9 pr-3 text-sm text-ink placeholder:text-orbit-dim focus:border-orbit-cyan focus:outline-none"
           />
         </div>
       </div>
@@ -73,13 +73,13 @@ export function DirectoryPage() {
                       >
                         <Avatar name={a.name} from={a.avatarFrom} to={a.avatarTo} size={36} />
                         <span>
-                          <span className="block font-medium text-white">{a.name}</span>
+                          <span className="block font-medium text-ink">{a.name}</span>
                           <span className="block text-xs text-orbit-muted">{a.title}</span>
                         </span>
                       </Link>
                     </td>
                     <td className="px-5 py-3.5">
-                      <span className="block text-white">{a.missionCode}</span>
+                      <span className="block text-ink">{a.missionCode}</span>
                       <span className="block text-xs text-orbit-muted">Day {a.missionDay}</span>
                     </td>
                     <td className="px-5 py-3.5">

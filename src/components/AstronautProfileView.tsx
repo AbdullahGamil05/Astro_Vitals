@@ -21,7 +21,7 @@ function InfoList({ items }: { items: Array<[string, string]> }) {
       {items.map(([k, v]) => (
         <div key={k}>
           <dt className="text-xs text-orbit-dim">{k}</dt>
-          <dd className="mt-0.5 text-white">{v}</dd>
+          <dd className="mt-0.5 text-ink">{v}</dd>
         </div>
       ))}
     </dl>
@@ -35,7 +35,7 @@ export function AstronautProfileView({ astronaut: a, backTo }: { astronaut: Astr
   return (
     <div className="space-y-6">
       {backTo ? (
-        <Link to={backTo.to} className="inline-flex items-center gap-1.5 text-sm text-orbit-muted hover:text-white">
+        <Link to={backTo.to} className="inline-flex items-center gap-1.5 text-sm text-orbit-muted hover:text-ink">
           <ArrowLeft className="size-4" aria-hidden="true" />
           {backTo.label}
         </Link>
@@ -49,7 +49,7 @@ export function AstronautProfileView({ astronaut: a, backTo }: { astronaut: Astr
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center">
           <Avatar name={a.name} from={a.avatarFrom} to={a.avatarTo} size={72} />
           <div className="flex-1">
-            <h2 className="text-2xl font-semibold text-white">{a.name}</h2>
+            <h2 className="text-2xl font-semibold text-ink">{a.name}</h2>
             <p className="mt-0.5 text-sm text-orbit-muted">
               {a.title} · {a.missionCode}
             </p>
@@ -98,7 +98,7 @@ export function AstronautProfileView({ astronaut: a, backTo }: { astronaut: Astr
 
       <section aria-labelledby="profile-vitals">
         <div className="mb-3 flex items-center gap-3">
-          <h2 id="profile-vitals" className="text-sm font-semibold text-white">
+          <h2 id="profile-vitals" className="text-sm font-semibold text-ink">
             Current health metrics
           </h2>
           <SimulatedTag />
@@ -120,11 +120,11 @@ export function AstronautProfileView({ astronaut: a, backTo }: { astronaut: Astr
           </div>
           <div>
             <p className="mb-1 text-xs font-medium text-orbit-muted">Resting heart rate (bpm)</p>
-            <TrendChart data={a.daily} xKey="label" dataKey="restingHeartRate" color="#4A90FF" unit="bpm" name="Resting HR" domain={["auto", "auto"]} height={170} interval={2} />
+            <TrendChart data={a.daily} xKey="label" dataKey="restingHeartRate" color="#3B82F6" unit="bpm" name="Resting HR" domain={["auto", "auto"]} height={170} interval={2} />
           </div>
           <div>
             <p className="mb-1 text-xs font-medium text-orbit-muted">Sleep (hours)</p>
-            <TrendChart data={a.daily} xKey="label" dataKey="sleepHours" color="#8B9CF7" unit="h" name="Sleep" domain={[2, 9]} height={170} interval={2} />
+            <TrendChart data={a.daily} xKey="label" dataKey="sleepHours" color="#94A3B8" unit="h" name="Sleep" domain={[2, 9]} height={170} interval={2} />
           </div>
         </div>
       </Card>
@@ -138,14 +138,14 @@ export function AstronautProfileView({ astronaut: a, backTo }: { astronaut: Astr
                 <span
                   className="flex size-10 shrink-0 items-center justify-center rounded-lg font-mono text-sm font-semibold"
                   style={{
-                    backgroundColor: `${s.score >= 80 ? "#20C7A5" : s.score >= 60 ? "#F59E42" : "#F0524F"}1f`,
-                    color: s.score >= 80 ? "#20C7A5" : s.score >= 60 ? "#F59E42" : "#F0524F",
+                    backgroundColor: `${s.score >= 80 ? "#3FBF9F" : s.score >= 60 ? "#F97316" : "#EF4444"}1f`,
+                    color: s.score >= 80 ? "#3FBF9F" : s.score >= 60 ? "#F97316" : "#EF4444",
                   }}
                 >
                   {s.score}
                 </span>
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-white">
+                  <p className="text-sm font-medium text-ink">
                     {s.type} <span className="font-normal text-orbit-dim">· {s.date} · {s.mood}</span>
                   </p>
                   <p className="mt-0.5 text-xs leading-relaxed text-orbit-muted">{s.summary}</p>
@@ -162,7 +162,7 @@ export function AstronautProfileView({ astronaut: a, backTo }: { astronaut: Astr
             {history.map((al) => (
               <li key={al.id} className="rounded-lg border border-orbit-line bg-black/15 p-3">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="text-sm font-medium text-white">{al.title}</p>
+                  <p className="text-sm font-medium text-ink">{al.title}</p>
                   <SeverityBadge severity={al.severity} />
                 </div>
                 <p className="mt-1 text-xs text-orbit-muted">{al.message}</p>

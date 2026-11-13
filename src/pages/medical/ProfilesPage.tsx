@@ -16,7 +16,7 @@ export function ProfilesPage() {
           <div className="flex items-center gap-3">
             <Avatar name={a.name} from={a.avatarFrom} to={a.avatarTo} size={48} />
             <div className="min-w-0">
-              <p className="truncate font-medium text-white">{a.name}</p>
+              <p className="truncate font-medium text-ink">{a.name}</p>
               <p className="truncate text-xs text-orbit-muted">{a.title}</p>
             </div>
           </div>
@@ -29,15 +29,15 @@ export function ProfilesPage() {
           <dl className="mt-4 grid grid-cols-3 gap-2 border-t border-orbit-line pt-4 text-center">
             <div>
               <dt className="text-[11px] text-orbit-dim">HR</dt>
-              <dd className="font-mono text-sm text-white">{a.vitals.heartRate}</dd>
+              <dd className="font-mono text-sm text-ink">{a.vitals.heartRate}</dd>
             </div>
             <div>
               <dt className="text-[11px] text-orbit-dim">SpO2</dt>
-              <dd className="font-mono text-sm text-white">{a.vitals.spo2}%</dd>
+              <dd className="font-mono text-sm text-ink">{a.vitals.spo2}%</dd>
             </div>
             <div>
               <dt className="text-[11px] text-orbit-dim">Alerts</dt>
-              <dd className="font-mono text-sm text-white">{activeAlertsFor(a.id).length}</dd>
+              <dd className="font-mono text-sm text-ink">{activeAlertsFor(a.id).length}</dd>
             </div>
           </dl>
         </Link>

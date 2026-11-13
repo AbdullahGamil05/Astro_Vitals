@@ -30,7 +30,7 @@ export function Sidebar({ role, collapsed, mobileOpen, onToggleCollapsed, onClos
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex flex-col border-r border-orbit-line bg-orbit-side/80 backdrop-blur-md transition-[transform,width] duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 flex flex-col border-r border-white/10 bg-[#06080F]/90 backdrop-blur-md transition-[transform,width] duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0",
           collapsed ? "lg:w-[72px]" : "lg:w-64",
           "w-64",
           mobileOpen ? "translate-x-0" : "-translate-x-full",
@@ -41,7 +41,7 @@ export function Sidebar({ role, collapsed, mobileOpen, onToggleCollapsed, onClos
           <button
             type="button"
             onClick={onCloseMobile}
-            className="rounded-md p-1.5 text-orbit-muted hover:bg-white/5 hover:text-white lg:hidden"
+            className="rounded-md p-1.5 text-orbit-muted hover:bg-white/5 hover:text-ink lg:hidden"
             aria-label="Close navigation"
           >
             <X className="size-5" />
@@ -63,15 +63,15 @@ export function Sidebar({ role, collapsed, mobileOpen, onToggleCollapsed, onClos
                   "group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
                   collapsed && "lg:justify-center lg:px-0",
                   isActive
-                    ? "bg-orbit-cyan/10 text-white"
-                    : "text-orbit-muted hover:bg-white/5 hover:text-white",
+                    ? "bg-white/[0.06] text-ink"
+                    : "text-orbit-muted hover:bg-white/5 hover:text-ink",
                 )
               }
             >
               {({ isActive }) => (
                 <>
                   {isActive ? (
-                    <span className="absolute -left-3 top-2 bottom-2 w-1 rounded-full bg-nasa-red shadow-[0_0_12px_#fc3d21]" />
+                    <span className="absolute -left-3 top-2 bottom-2 w-0.5 bg-orbit-cyan" />
                   ) : null}
                   <Icon className={cn("size-[18px] shrink-0", isActive && "text-orbit-cyan")} aria-hidden="true" />
                   <span className={cn(collapsed && "lg:sr-only")}>{label}</span>
@@ -89,7 +89,7 @@ export function Sidebar({ role, collapsed, mobileOpen, onToggleCollapsed, onClos
           <button
             type="button"
             onClick={onToggleCollapsed}
-            className="hidden w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-orbit-muted hover:bg-white/5 hover:text-white lg:flex"
+            className="hidden w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-orbit-muted hover:bg-white/5 hover:text-ink lg:flex"
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {collapsed ? <PanelLeftOpen className="size-4" /> : <PanelLeftClose className="size-4" />}
