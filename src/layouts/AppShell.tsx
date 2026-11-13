@@ -12,7 +12,7 @@ export function AppShell() {
   if (!user) return null;
 
   return (
-    <div className="flex min-h-screen bg-orbit-bg">
+    <div className="flex min-h-screen">
       <Sidebar
         role={user.role}
         collapsed={collapsed}

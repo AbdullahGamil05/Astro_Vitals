@@ -28,9 +28,7 @@ export function LoginPage() {
   };
 
   return (
-    <div className="orbit-grid-bg relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10">
-      <div className="pointer-events-none absolute -left-32 -top-32 size-[28rem] rounded-full bg-orbit-cyan/15 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-40 -right-24 size-[30rem] rounded-full bg-orbit-teal/10 blur-3xl" />
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10">
 
       <div className="relative w-full max-w-md">
         <div className="mb-8 flex flex-col items-center text-center">

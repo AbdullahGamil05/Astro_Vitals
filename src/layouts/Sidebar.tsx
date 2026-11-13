@@ -30,7 +30,7 @@ export function Sidebar({ role, collapsed, mobileOpen, onToggleCollapsed, onClos
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex flex-col border-r border-orbit-line bg-orbit-side transition-[transform,width] duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 flex flex-col border-r border-orbit-line bg-orbit-side/80 backdrop-blur-md transition-[transform,width] duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0",
           collapsed ? "lg:w-[72px]" : "lg:w-64",
           "w-64",
           mobileOpen ? "translate-x-0" : "-translate-x-full",
