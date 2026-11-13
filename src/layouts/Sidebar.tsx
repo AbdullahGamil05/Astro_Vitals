@@ -30,7 +30,7 @@ export function Sidebar({ role, collapsed, mobileOpen, onToggleCollapsed, onClos
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex flex-col border-r border-orbit-line bg-orbit-side transition-[transform,width] duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 flex flex-col border-r border-orbit-line bg-orbit-side/80 backdrop-blur-md transition-[transform,width] duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0",
           collapsed ? "lg:w-[72px]" : "lg:w-64",
           "w-64",
           mobileOpen ? "translate-x-0" : "-translate-x-full",
@@ -71,7 +71,7 @@ export function Sidebar({ role, collapsed, mobileOpen, onToggleCollapsed, onClos
               {({ isActive }) => (
                 <>
                   {isActive ? (
-                    <span className="absolute -left-3 top-2 bottom-2 w-0.5 rounded-full bg-orbit-cyan shadow-[0_0_10px_#28C5D8]" />
+                    <span className="absolute -left-3 top-2 bottom-2 w-0.5 rounded-full bg-nasa-red shadow-[0_0_10px_#fc3d21]" />
                   ) : null}
                   <Icon className={cn("size-[18px] shrink-0", isActive && "text-orbit-cyan")} aria-hidden="true" />
                   <span className={cn(collapsed && "lg:sr-only")}>{label}</span>

@@ -58,7 +58,7 @@ export function MedicalOverviewPage() {
                     type="monotone"
                     dataKey={a.id}
                     name={a.name}
-                    stroke={a.status === "stable" ? ["#28C5D8", "#20C7A5", "#8B9CF7"][astronauts.filter((x) => x.status === "stable").indexOf(a)] : statusColor[a.status]}
+                    stroke={a.status === "stable" ? ["#4A90FF", "#20C7A5", "#8B9CF7"][astronauts.filter((x) => x.status === "stable").indexOf(a)] : statusColor[a.status]}
                     strokeWidth={a.status === "stable" ? 1.8 : 2.6}
                     dot={false}
                   />

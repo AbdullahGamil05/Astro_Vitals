@@ -74,7 +74,7 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
 
       <div className="min-w-0 flex-1">
         <p className="orbit-eyebrow hidden sm:block">{user.role === "astronaut" ? "Crew Console" : "Medical Console"}</p>
-        <h1 className="truncate text-lg font-semibold leading-tight text-white">{title}</h1>
+        <h1 className="orbit-title truncate text-xl leading-tight text-white">{title}</h1>
       </div>
 
       <Popover

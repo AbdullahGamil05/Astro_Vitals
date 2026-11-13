@@ -110,7 +110,7 @@ export function AstronautHomePage() {
               <p className="mb-1 flex items-center gap-1.5 text-xs font-medium text-orbit-muted">
                 <HeartPulse className="size-3.5 text-orbit-cyan" aria-hidden="true" /> Heart rate (bpm)
               </p>
-              <TrendChart data={me.hourly} xKey="label" dataKey="heartRate" color="#28C5D8" unit="bpm" name="Heart rate" domain={[50, 90]} height={160} />
+              <TrendChart data={me.hourly} xKey="label" dataKey="heartRate" color="#4A90FF" unit="bpm" name="Heart rate" domain={[50, 90]} height={160} />
             </div>
             <div>
               <p className="mb-1 flex items-center gap-1.5 text-xs font-medium text-orbit-muted">
@@ -147,7 +147,7 @@ export function AstronautHomePage() {
             </div>
             <dl className="mt-4 space-y-3 text-sm">
               {[
-                { label: "Deep sleep", v: me.sleep.deepHours, max: 2.5, c: "#28C5D8", suffix: "h" },
+                { label: "Deep sleep", v: me.sleep.deepHours, max: 2.5, c: "#4A90FF", suffix: "h" },
                 { label: "REM sleep", v: me.sleep.remHours, max: 2.5, c: "#8B9CF7", suffix: "h" },
                 { label: "Sleep efficiency", v: me.sleep.efficiency, max: 100, c: "#20C7A5", suffix: "%" },
               ].map((row) => (

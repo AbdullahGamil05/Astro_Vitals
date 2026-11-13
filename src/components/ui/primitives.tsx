@@ -80,7 +80,7 @@ export function StatusBadge({ status, compact }: { status: HealthStatus; compact
 const severityStyle: Record<AlertSeverity, { color: string; label: string }> = {
   critical: { color: "#F0524F", label: "Critical" },
   warning: { color: "#F59E42", label: "Warning" },
-  info: { color: "#28C5D8", label: "Info" },
+  info: { color: "#4A90FF", label: "Info" },
 };
 
 export function SeverityDot({ severity }: { severity: AlertSeverity }) {
@@ -118,7 +118,7 @@ export function SimulatedTag({ className }: { className?: string }) {
   );
 }
 
-export function ProgressBar({ value, color = "#28C5D8" }: { value: number; color?: string }) {
+export function ProgressBar({ value, color = "#4A90FF" }: { value: number; color?: string }) {
   return (
     <div
       className="h-1.5 w-full overflow-hidden rounded-full bg-white/8"
@@ -150,9 +150,9 @@ export function ProgressRing({
       <svg width={size} height={size} className="-rotate-90" aria-hidden="true">
         <defs>
           <linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#28C5D8" />
-            <stop offset="100%" stopColor="#20C7A5" />
-          </linearGradient>
+            <stop offset="0%" stopColor="#4A90FF" />
+          <stop offset="100%" stopColor="#9CC4FF" />
+        </linearGradient>
         </defs>
         <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="rgb(255 255 255 / 0.08)" strokeWidth={stroke} />
         <circle
