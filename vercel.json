@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/sleep-prediction.py": {
+      "excludeFiles": "{node_modules/**,public/**,dist/**,server/**,scripts/**,api/manus/**,api/_lib/**,src/components/**,src/pages/**,src/services/**,src/lib/**,src/data/**,src/layouts/**,src/*.tsx,src/*.css,src/model/*.joblib,*.md,*.json,*.lock,*.yaml}"
+    }
+  }
+}
