@@ -41,7 +41,7 @@ function Popover({
       {trigger({ open, toggle: () => setOpen((o) => !o) })}
       {open ? (
         <div
-          className={`absolute top-full z-50 mt-2 w-72 rounded-xl border border-orbit-line bg-orbit-side p-2 shadow-2xl shadow-black/50 ${align === "right" ? "right-0" : "left-0"}`}
+          className={`absolute top-full z-50 mt-2 w-72 rounded-lg border border-orbit-line bg-orbit-side p-2 shadow-2xl shadow-black/50 ${align === "right" ? "right-0" : "left-0"}`}
         >
           {children(() => setOpen(false))}
         </div>
@@ -66,7 +66,7 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
       <button
         type="button"
         onClick={onOpenMobileNav}
-        className="rounded-md p-2 text-orbit-muted hover:bg-white/5 hover:text-white lg:hidden"
+        className="rounded-md p-2 text-orbit-muted hover:bg-white/5 hover:text-ink lg:hidden"
         aria-label="Open navigation"
       >
         <Menu className="size-5" />
@@ -74,7 +74,7 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
 
       <div className="min-w-0 flex-1">
         <p className="orbit-eyebrow hidden sm:block">{user.role === "astronaut" ? "Crew Console" : "Medical Console"}</p>
-        <h1 className="orbit-title truncate text-xl leading-tight text-white">{title}</h1>
+        <h1 className="orbit-title truncate text-xl leading-tight text-ink">{title}</h1>
       </div>
 
       <Popover
@@ -84,11 +84,11 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
             onClick={toggle}
             aria-expanded={open}
             aria-label={`Notifications, ${relevantAlerts.length} active`}
-            className="relative rounded-lg p-2 text-orbit-muted hover:bg-white/5 hover:text-white"
+            className="relative rounded-lg p-2 text-orbit-muted hover:bg-white/5 hover:text-ink"
           >
             <Bell className="size-5" />
             {relevantAlerts.length ? (
-              <span className="absolute right-1 top-1 flex size-4 items-center justify-center rounded-full bg-orbit-crit font-mono text-[10px] font-semibold text-white">
+              <span className="absolute right-1 top-1 flex size-4 items-center justify-center rounded-full bg-orbit-crit font-mono text-[10px] font-semibold text-ink">
                 {relevantAlerts.length}
               </span>
             ) : null}
@@ -106,7 +106,7 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
                   <li key={a.id} className="flex gap-3 rounded-lg px-2 py-2 hover:bg-white/5">
                     <SeverityDot severity={a.severity} />
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-white">{a.title}</p>
+                      <p className="text-sm font-medium text-ink">{a.title}</p>
                       <p className="text-xs text-orbit-muted">
                         {user.role === "medical" ? `${getAstronaut(a.astronautId)?.name} · ` : ""}
                         {a.timeLabel}
@@ -140,7 +140,7 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
           >
             <Avatar name={user.name} from={user.avatarFrom} to={user.avatarTo} size={34} />
             <span className="hidden text-left sm:block">
-              <span className="block text-sm font-medium leading-tight text-white">{user.name}</span>
+              <span className="block text-sm font-medium leading-tight text-ink">{user.name}</span>
               <span className="block text-xs capitalize leading-tight text-orbit-muted">
                 {user.role === "astronaut" ? "Astronaut" : "Medical Officer"}
               </span>
@@ -152,15 +152,15 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
         {(close) => (
           <div role="menu">
             <div className="border-b border-orbit-line px-2 pb-3 pt-1">
-              <p className="text-sm font-medium text-white">{user.name}</p>
+              <p className="text-sm font-medium text-ink">{user.name}</p>
               <p className="text-xs text-orbit-muted">{user.title}</p>
-              <p className="mt-0.5 font-mono text-[11px] text-orbit-dim">{user.email}</p>
+              <p className="mt-0.5 font-mono text-[11px] text-orbit-dim">{user.loginId}</p>
             </div>
             <Link
               to={profilePath}
               onClick={close}
               role="menuitem"
-              className="mt-1 flex items-center gap-2.5 rounded-lg px-2 py-2 text-sm text-orbit-muted hover:bg-white/5 hover:text-white"
+              className="mt-1 flex items-center gap-2.5 rounded-lg px-2 py-2 text-sm text-orbit-muted hover:bg-white/5 hover:text-ink"
             >
               <UserRound className="size-4" />
               {user.role === "astronaut" ? "My profile" : "Crew directory"}

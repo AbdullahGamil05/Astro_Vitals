@@ -8,9 +8,9 @@ export const sensorLabel: Record<SensorStatus, string> = {
 };
 
 export const sensorColor: Record<SensorStatus, string> = {
-  connected: "#20C7A5",
-  weak: "#F59E42",
-  disconnected: "#F0524F",
+  connected: "#3FBF9F",
+  weak: "#F97316",
+  disconnected: "#EF4444",
   idle: "#7C8BA3",
 };
 

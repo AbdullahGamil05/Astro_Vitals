@@ -53,17 +53,17 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           return (
             <div
               key={t.id}
-              className="pointer-events-auto flex items-start gap-3 rounded-xl border border-orbit-line bg-orbit-side p-3 shadow-2xl shadow-black/50"
+              className="pointer-events-auto flex items-start gap-3 rounded-lg border border-orbit-line bg-orbit-side p-3 shadow-2xl shadow-black/50"
             >
               <Icon className={cn("mt-0.5 size-5 shrink-0", className)} aria-hidden="true" />
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-white">{t.message}</p>
+                <p className="text-sm font-medium text-ink">{t.message}</p>
                 {t.detail ? <p className="mt-0.5 text-xs text-orbit-muted">{t.detail}</p> : null}
               </div>
               <button
                 type="button"
                 onClick={() => dismiss(t.id)}
-                className="rounded p-1 text-orbit-dim hover:bg-white/5 hover:text-white"
+                className="rounded p-1 text-orbit-dim hover:bg-white/5 hover:text-ink"
                 aria-label="Dismiss notification"
               >
                 <X className="size-4" />

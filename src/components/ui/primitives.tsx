@@ -12,7 +12,7 @@ export function Card({
   children: ReactNode;
   glow?: boolean;
 }) {
-  return <section className={cn("orbit-card p-5", glow && "orbit-glow", className)}>{children}</section>;
+  return <section className={cn("orbit-card p-6", glow && "orbit-glow", className)}>{children}</section>;
 }
 
 export function CardHeader({
@@ -25,10 +25,10 @@ export function CardHeader({
   action?: ReactNode;
 }) {
   return (
-    <header className="mb-4 flex items-start justify-between gap-3">
+    <header className="mb-5 flex items-start justify-between gap-3 border-b border-white/10 pb-4">
       <div>
-        <h2 className="text-sm font-semibold text-white">{title}</h2>
-        {subtitle ? <p className="mt-0.5 text-xs text-orbit-muted">{subtitle}</p> : null}
+        <h2 className="text-[15px] font-semibold tracking-tight text-ink">{title}</h2>
+        {subtitle ? <p className="mt-1 text-xs text-orbit-muted">{subtitle}</p> : null}
       </div>
       {action}
     </header>
@@ -49,7 +49,7 @@ export function Avatar({
   return (
     <span
       aria-hidden="true"
-      className="inline-flex shrink-0 items-center justify-center rounded-full font-semibold text-white ring-1 ring-white/15"
+      className="inline-flex shrink-0 items-center justify-center rounded-full font-mono font-medium text-ink ring-1 ring-white/15"
       style={{
         width: size,
         height: size,
@@ -66,7 +66,7 @@ export function StatusBadge({ status, compact }: { status: HealthStatus; compact
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium",
+        "inline-flex items-center gap-1.5 rounded border px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-wider",
         statusSoftBg[status],
         statusText[status],
       )}
@@ -78,16 +78,16 @@ export function StatusBadge({ status, compact }: { status: HealthStatus; compact
 }
 
 const severityStyle: Record<AlertSeverity, { color: string; label: string }> = {
-  critical: { color: "#F0524F", label: "Critical" },
-  warning: { color: "#F59E42", label: "Warning" },
-  info: { color: "#4A90FF", label: "Info" },
+  critical: { color: "#EF4444", label: "Critical" },
+  warning: { color: "#F97316", label: "Warning" },
+  info: { color: "#3B82F6", label: "Info" },
 };
 
 export function SeverityDot({ severity }: { severity: AlertSeverity }) {
   return (
     <span
       className="mt-1.5 size-2 shrink-0 rounded-full"
-      style={{ backgroundColor: severityStyle[severity].color, boxShadow: `0 0 8px ${severityStyle[severity].color}88` }}
+      style={{ backgroundColor: severityStyle[severity].color }}
       title={severityStyle[severity].label}
     />
   );
@@ -97,7 +97,7 @@ export function SeverityBadge({ severity }: { severity: AlertSeverity }) {
   const s = severityStyle[severity];
   return (
     <span
-      className="inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium"
+      className="inline-flex items-center rounded border px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-wider"
       style={{ color: s.color, borderColor: `${s.color}40`, backgroundColor: `${s.color}14` }}
     >
       {s.label}
@@ -109,7 +109,7 @@ export function SimulatedTag({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded border border-orbit-cyan/25 bg-orbit-cyan/10 px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider text-orbit-cyan",
+        "inline-flex items-center rounded border border-white/15 px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider text-orbit-muted",
         className,
       )}
     >
@@ -118,16 +118,16 @@ export function SimulatedTag({ className }: { className?: string }) {
   );
 }
 
-export function ProgressBar({ value, color = "#4A90FF" }: { value: number; color?: string }) {
+export function ProgressBar({ value, color = "#3B82F6" }: { value: number; color?: string }) {
   return (
     <div
-      className="h-1.5 w-full overflow-hidden rounded-full bg-white/8"
+      className="h-1 w-full overflow-hidden rounded-sm bg-white/10"
       role="progressbar"
       aria-valuenow={Math.round(value)}
       aria-valuemin={0}
       aria-valuemax={100}
     >
-      <div className="h-full rounded-full" style={{ width: `${Math.min(100, value)}%`, backgroundColor: color }} />
+      <div className="h-full" style={{ width: `${Math.min(100, value)}%`, backgroundColor: color }} />
     </div>
   );
 }
@@ -135,7 +135,7 @@ export function ProgressBar({ value, color = "#4A90FF" }: { value: number; color
 export function ProgressRing({
   value,
   size = 112,
-  stroke = 9,
+  stroke = 6,
   children,
 }: {
   value: number;
@@ -148,21 +148,15 @@ export function ProgressRing({
   return (
     <div className="relative" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90" aria-hidden="true">
-        <defs>
-          <linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#4A90FF" />
-          <stop offset="100%" stopColor="#9CC4FF" />
-        </linearGradient>
-        </defs>
         <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="rgb(255 255 255 / 0.08)" strokeWidth={stroke} />
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="url(#ring-grad)"
+          stroke="#3B82F6"
           strokeWidth={stroke}
-          strokeLinecap="round"
+          strokeLinecap="butt"
           strokeDasharray={circumference}
           strokeDashoffset={circumference * (1 - value / 100)}
         />

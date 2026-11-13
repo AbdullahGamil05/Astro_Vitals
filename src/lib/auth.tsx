@@ -13,7 +13,7 @@ export type SessionUser = Omit<DemoAccount, "password">;
 
 interface AuthContextValue {
   user: SessionUser | null;
-  login: (email: string, password: string) => { ok: true; user: SessionUser } | { ok: false; error: string };
+  login: (loginId: string, password: string) => { ok: true; user: SessionUser } | { ok: false; error: string };
   logout: () => void;
 }
 
@@ -26,8 +26,8 @@ function toSessionUser(account: DemoAccount): SessionUser {
 
 function readSession(): SessionUser | null {
   try {
-    const email = window.localStorage.getItem(STORAGE_KEY);
-    const account = demoAccounts.find((a) => a.email === email);
+    const loginId = window.localStorage.getItem(STORAGE_KEY);
+    const account = demoAccounts.find((a) => a.loginId === loginId);
     return account ? toSessionUser(account) : null;
   } catch {
     return null;
@@ -37,13 +37,13 @@ function readSession(): SessionUser | null {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<SessionUser | null>(readSession);
 
-  const login = useCallback<AuthContextValue["login"]>((email, password) => {
+  const login = useCallback<AuthContextValue["login"]>((loginId, password) => {
     const account = demoAccounts.find(
-      (a) => a.email.toLowerCase() === email.trim().toLowerCase() && a.password === password,
+      (a) => a.loginId.toLowerCase() === loginId.trim().toLowerCase() && a.password === password,
     );
     if (!account) return { ok: false, error: "Invalid demo credentials. Use one of the demo accounts below." };
     const sessionUser = toSessionUser(account);
-    window.localStorage.setItem(STORAGE_KEY, account.email);
+    window.localStorage.setItem(STORAGE_KEY, account.loginId);
     setUser(sessionUser);
     return { ok: true, user: sessionUser };
   }, []);

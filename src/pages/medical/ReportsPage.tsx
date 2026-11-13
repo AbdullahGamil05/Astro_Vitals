@@ -100,7 +100,7 @@ export function ReportsPage() {
         ].map((s) => (
           <Card key={s.label} className="p-4">
             <p className="orbit-eyebrow">{s.label}</p>
-            <p className="mt-1 font-mono text-3xl font-semibold text-white">{s.value}</p>
+            <p className="mt-1 font-mono text-3xl font-semibold text-ink">{s.value}</p>
           </Card>
         ))}
       </div>
@@ -145,7 +145,7 @@ export function ReportsPage() {
                 return (
                   <tr key={r.id} className="hover:bg-white/[0.02]">
                     <td className="py-3 pr-3">
-                      <Link to={`/medical/astronauts/${r.id}`} className="flex items-center gap-2.5 text-white hover:underline">
+                      <Link to={`/medical/astronauts/${r.id}`} className="flex items-center gap-2.5 text-ink hover:underline">
                         <Avatar name={a.name} from={a.avatarFrom} to={a.avatarTo} size={28} />
                         {r.name}
                       </Link>
@@ -153,15 +153,15 @@ export function ReportsPage() {
                     <td className="px-3 py-3">
                       <StatusBadge status={a.status} compact />
                     </td>
-                    <td className="px-3 py-3 font-mono text-white/90">{r.heartRate}</td>
-                    <td className="px-3 py-3 font-mono text-white/90">{r.spo2}%</td>
-                    <td className="px-3 py-3 font-mono text-white/90">{r.temperature}</td>
-                    <td className="px-3 py-3 font-mono text-white/90">{r.sleepHours} h</td>
-                    <td className="px-3 py-3 font-mono text-white/90">
+                    <td className="px-3 py-3 font-mono text-ink/90">{r.heartRate}</td>
+                    <td className="px-3 py-3 font-mono text-ink/90">{r.spo2}%</td>
+                    <td className="px-3 py-3 font-mono text-ink/90">{r.temperature}</td>
+                    <td className="px-3 py-3 font-mono text-ink/90">{r.sleepHours} h</td>
+                    <td className="px-3 py-3 font-mono text-ink/90">
                       {r.activeAlerts}
                       {r.activeAlerts ? <span className="text-orbit-muted"> ({r.acknowledged} ack)</span> : null}
                     </td>
-                    <td className="px-3 py-3 font-mono text-white/90">{r.engagementPoints}</td>
+                    <td className="px-3 py-3 font-mono text-ink/90">{r.engagementPoints}</td>
                     <td className="py-3 pl-3 text-orbit-muted">{r.lastAssessment}</td>
                   </tr>
                 );

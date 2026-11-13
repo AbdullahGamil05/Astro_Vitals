@@ -19,7 +19,7 @@ export function LeaderboardPage() {
               <Avatar name={mine.astronaut.name} from={mine.astronaut.avatarFrom} to={mine.astronaut.avatarTo} size={52} />
               <div>
                 <p className="orbit-eyebrow">Your position</p>
-                <p className="font-mono text-3xl font-semibold text-white">
+                <p className="font-mono text-3xl font-semibold text-ink">
                   #{mine.rank}
                   <span className="ml-2 text-sm font-normal text-orbit-muted">of {board.length}</span>
                 </p>
@@ -33,7 +33,7 @@ export function LeaderboardPage() {
             ].map((s) => (
               <div key={s.label}>
                 <p className="orbit-eyebrow">{s.label}</p>
-                <p className="mt-1 font-mono text-xl font-semibold tabular-nums text-white">{s.value}</p>
+                <p className="mt-1 font-mono text-xl font-semibold tabular-nums text-ink">{s.value}</p>
               </div>
             ))}
           </div>
@@ -72,7 +72,7 @@ export function LeaderboardPage() {
                       <div className="flex items-center gap-3">
                         <Avatar name={e.astronaut.name} from={e.astronaut.avatarFrom} to={e.astronaut.avatarTo} size={32} />
                         <div className="min-w-0">
-                          <p className="truncate font-medium text-white">
+                          <p className="truncate font-medium text-ink">
                             {e.astronaut.name}
                             {isMe ? <span className="ml-2 text-xs font-normal text-orbit-cyan">You</span> : null}
                           </p>
@@ -81,7 +81,7 @@ export function LeaderboardPage() {
                       </div>
                     </td>
                     <td className="py-3 pr-4 text-right font-mono tabular-nums text-orbit-cyan">{e.engagement.totalPoints}</td>
-                    <td className="py-3 pr-4 text-right font-mono tabular-nums text-white">{e.engagement.weeklyPoints}</td>
+                    <td className="py-3 pr-4 text-right font-mono tabular-nums text-ink">{e.engagement.weeklyPoints}</td>
                     <td className="py-3 pr-4">
                       <div className="flex items-center gap-2">
                         <div className="flex-1">
@@ -119,7 +119,7 @@ export function LeaderboardPage() {
       {mine ? (
         <section aria-labelledby="achievements-heading">
           <div className="mb-3 flex items-center gap-3">
-            <h2 id="achievements-heading" className="text-sm font-semibold text-white">
+            <h2 id="achievements-heading" className="text-sm font-semibold text-ink">
               Achievements
             </h2>
             <span className="text-xs text-orbit-muted">
@@ -132,14 +132,14 @@ export function LeaderboardPage() {
                 <div className="flex items-start gap-3">
                   <span
                     className={cn(
-                      "flex size-10 shrink-0 items-center justify-center rounded-xl",
+                      "flex size-10 shrink-0 items-center justify-center rounded-lg",
                       b.unlocked ? "bg-orbit-cyan/15 text-orbit-cyan" : "bg-white/5 text-orbit-dim",
                     )}
                   >
                     {b.unlocked ? <b.def.icon className="size-5" aria-hidden="true" /> : <Lock className="size-5" aria-hidden="true" />}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-white">{b.def.name}</p>
+                    <p className="text-sm font-semibold text-ink">{b.def.name}</p>
                     <p className="mt-0.5 text-xs leading-relaxed text-orbit-muted">{b.def.description}</p>
                   </div>
                   <span
@@ -153,7 +153,7 @@ export function LeaderboardPage() {
                 </div>
                 <div className="mt-3 flex items-center gap-3">
                   <div className="flex-1">
-                    <ProgressBar value={(b.value / b.def.target) * 100} color={b.unlocked ? "#20C7A5" : "#4A90FF"} />
+                    <ProgressBar value={(b.value / b.def.target) * 100} color={b.unlocked ? "#3FBF9F" : "#3B82F6"} />
                   </div>
                   <span className="font-mono text-xs tabular-nums text-orbit-muted">
                     {b.value}/{b.def.target} {b.def.unit}
@@ -179,8 +179,8 @@ export function LeaderboardPage() {
             <span className="font-mono text-orbit-cyan">+{BONUS_POINTS}</span>
           </li>
           <li className="flex justify-between py-1.5">
-            <span className="font-medium text-white">Daily maximum</span>
-            <span className="font-mono text-white">{MAX_DAILY_POINTS}</span>
+            <span className="font-medium text-ink">Daily maximum</span>
+            <span className="font-mono text-ink">{MAX_DAILY_POINTS}</span>
           </li>
         </ul>
       </Card>
