@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  --color-orbit-bg: #04070f;
-  --color-orbit-card: #0a1222;
-  --color-orbit-card-2: #101c34;
-  --color-orbit-side: #070d1a;
+  /* ── NASA-branded color system ─────────────────────── */
+  --color-orbit-bg: #02050d;
+  --color-orbit-card: #0a1426;
+  --color-orbit-card-2: #0f1e36;
+  --color-orbit-side: #060c1c;
   --color-orbit-cyan: #4a90ff;
   --color-orbit-teal: #20c7a5;
   --color-orbit-muted: #9db0cc;
@@ -12,9 +13,15 @@
   --color-orbit-warn: #f59e42;
   --color-orbit-crit: #f0524f;
   --color-orbit-line: rgb(255 255 255 / 0.08);
+
+  /* NASA official palette */
   --color-nasa-blue: #0b3d91;
+  --color-nasa-blue-light: #1151b8;
+  --color-nasa-blue-deep: #062455;
   --color-nasa-red: #fc3d21;
   --color-nasa-red-deep: #de3118;
+  --color-nasa-gold: #ffb000;
+  --color-nasa-silver: #d0d5dd;
 
   --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Barlow Condensed", "Barlow", ui-sans-serif, system-ui, sans-serif;
@@ -41,11 +48,11 @@
   }
 
   ::selection {
-    background: rgb(74 144 255 / 0.35);
+    background: rgb(252 61 33 / 0.35);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-orbit-cyan);
+    outline: 2px solid var(--color-nasa-red);
     outline-offset: 2px;
   }
 
@@ -53,16 +60,22 @@
     width: 8px;
     height: 8px;
   }
+  ::-webkit-scrollbar-track {
+    background: rgb(11 61 145 / 0.08);
+  }
   ::-webkit-scrollbar-thumb {
     background: #1e3148;
     border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2a425e;
   }
 }
 
 @layer components {
   .orbit-card {
     background-image:
-      linear-gradient(90deg, rgb(11 61 145 / 0.55), rgb(11 61 145 / 0) 38%),
+      linear-gradient(90deg, rgb(11 61 145 / 0.5), rgb(11 61 145 / 0) 38%),
       linear-gradient(180deg, rgb(255 255 255 / 0.025), rgb(255 255 255 / 0));
     background-size: 100% 2px, 100% 100%;
     background-repeat: no-repeat;
@@ -72,15 +85,25 @@
     @apply font-display font-semibold uppercase tracking-[0.12em];
   }
   .orbit-glow {
-    box-shadow: 0 0 0 1px rgb(74 144 255 / 0.15), 0 8px 32px -12px rgb(74 144 255 / 0.35);
+    box-shadow: 0 0 0 1px rgb(11 61 145 / 0.2), 0 8px 32px -12px rgb(11 61 145 / 0.4);
   }
   .orbit-eyebrow {
     @apply font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-orbit-dim;
   }
   .orbit-grid-bg {
     background-image:
-      linear-gradient(rgb(255 255 255 / 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px);
+      linear-gradient(rgb(11 61 145 / 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(11 61 145 / 0.04) 1px, transparent 1px);
     background-size: 44px 44px;
+  }
+  /* NASA-style accent bar for active states */
+  .nasa-accent {
+    @apply relative;
+  }
+  .nasa-accent::before {
+    content: "";
+    @apply absolute -left-3 top-2 bottom-2 w-0.5 rounded-full;
+    background: var(--color-nasa-red);
+    box-shadow: 0 0 10px var(--color-nasa-red);
   }
 }

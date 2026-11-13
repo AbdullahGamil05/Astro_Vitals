@@ -34,6 +34,7 @@ export function LoginPage() {
         <div className="mb-8 flex flex-col items-center text-center">
           <LogoMark size={72} />
           <h1 className="mt-4 font-display text-5xl font-bold tracking-[0.3em] text-white">ORBIT</h1>
+          <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-nasa-red">NASA Health Command</p>
           <p className="mt-2 text-sm text-orbit-muted">Astronaut health monitoring and medical decision support</p>
           <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-nasa-red/40 bg-nasa-red/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-white">
             <span className="size-1.5 rounded-full bg-nasa-red" aria-hidden="true" />
@@ -81,7 +82,7 @@ export function LoginPage() {
 
             <button
               type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-nasa-red-deep px-4 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-white shadow-[0_0_24px_-6px_#fc3d21] transition hover:bg-nasa-red"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-nasa-blue px-4 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-white shadow-[0_0_24px_-6px_#0b3d91] transition hover:bg-nasa-blue-light"
             >
               Sign in to mission console
               <ArrowRight className="size-4" aria-hidden="true" />

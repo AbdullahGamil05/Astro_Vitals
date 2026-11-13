@@ -24,7 +24,9 @@ export function MissionStrip() {
     <div className="flex h-8 items-center justify-between gap-4 border-b border-orbit-line bg-nasa-blue/40 px-4 font-mono text-[10px] uppercase tracking-[0.16em] text-white/80 backdrop-blur-md sm:px-6">
       <span className="flex min-w-0 items-center gap-2 truncate">
         <span className="size-1.5 shrink-0 rounded-full bg-nasa-red shadow-[0_0_8px_#fc3d21]" aria-hidden="true" />
-        <span className="truncate">NASA Space Apps Challenge 2026</span>
+        <span className="truncate font-semibold tracking-[0.18em] text-white">NASA ORBIT</span>
+        <span className="hidden text-white/40 md:inline">/</span>
+        <span className="hidden text-white/60 md:inline">Space Apps Challenge 2026</span>
         <span className="hidden text-white/40 md:inline">/</span>
         <span className="hidden text-white/60 md:inline">Simulated telemetry</span>
       </span>
