@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Droplets, Flame, HeartPulse, Moon, Rocket, Thermometer, Trophy, Wind } from "lucide-react";
+import { BodyScanner } from "@/components/scanner/BodyScanner";
 import { TrendChart } from "@/components/charts/TrendChart";
 import { DailyTasks } from "@/components/DailyTasks";
 import { VitalCard } from "@/components/ui/MetricCard";
@@ -78,6 +79,8 @@ export function AstronautHomePage() {
           </div>
         </div>
       </Card>
+
+      <BodyScanner astronaut={me} />
 
       <section aria-labelledby="vitals-heading">
         <div className="mb-3 flex flex-wrap items-center gap-3">
