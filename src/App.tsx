@@ -12,7 +12,9 @@ import { MedicalAlertsPage } from "@/pages/medical/AlertsPage";
 import { DirectoryPage } from "@/pages/medical/DirectoryPage";
 import { MedicalOverviewPage } from "@/pages/medical/OverviewPage";
 import { MedicalAstronautDetailPage, ProfilesPage } from "@/pages/medical/ProfilesPage";
-import { LeaderboardPage, OwnProfilePage, ReportsPage } from "@/pages/placeholders";
+import { LeaderboardPage } from "@/pages/astronaut/LeaderboardPage";
+import { OwnProfilePage } from "@/pages/astronaut/ProfilePage";
+import { ReportsPage } from "@/pages/medical/ReportsPage";
 
 function RootRedirect() {
   const { user } = useAuth();
