@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import { AwardAnnouncer } from "@/components/AwardAnnouncer";
 import { useAuth } from "@/lib/auth";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
@@ -24,6 +25,7 @@ export function AppShell() {
         <main className="mx-auto w-full max-w-[1400px] flex-1 p-4 sm:p-6">
           <Outlet />
         </main>
+        <AwardAnnouncer />
       </div>
     </div>
   );

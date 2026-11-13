@@ -76,6 +76,25 @@ export interface UnifiedAlert {
   timestamp?: number;
   active: boolean;
   live: boolean;
+  acknowledged?: boolean;
+  followUp?: FollowUpStatus;
+}
+
+export type FollowUpStatus = "none" | "scheduled" | "in_progress" | "completed";
+
+export interface CaseNote {
+  id: string;
+  author: string;
+  ts: number;
+  text: string;
+}
+
+/** Medical team handling of one alert: acknowledgement, follow-up and notes. */
+export interface AlertCase {
+  acknowledgedAt?: number;
+  acknowledgedBy?: string;
+  followUp: FollowUpStatus;
+  notes: CaseNote[];
 }
 
 export interface AssessmentAnswers {

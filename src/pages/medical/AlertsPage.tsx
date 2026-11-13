@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Search } from "lucide-react";
 import { AlertCard } from "@/components/AlertCard";
+import { CaseManager } from "@/components/CaseManager";
 import { Avatar, Card } from "@/components/ui/primitives";
 import { cn } from "@/lib/health";
 import { useAstronauts, useUnifiedAlerts } from "@/lib/liveData";
@@ -43,11 +45,17 @@ export function MedicalAlertsPage() {
   const crew = useAstronauts();
   const [status, setStatus] = useState<StatusFilter>("active");
   const [severity, setSeverity] = useState<SeverityFilter>("all");
+  const [query, setQuery] = useState("");
 
   const active = alerts.filter((a) => a.active);
-  const shown = alerts.filter(
-    (a) => (status === "all" || (status === "active") === a.active) && (severity === "all" || a.severity === severity),
-  );
+  const needle = query.trim().toLowerCase();
+  const shown = alerts.filter((a) => {
+    if (status !== "all" && (status === "active") !== a.active) return false;
+    if (severity !== "all" && a.severity !== severity) return false;
+    if (!needle) return true;
+    const name = crew.find((c) => c.id === a.astronautId)?.name.toLowerCase() ?? "";
+    return name.includes(needle) || a.title.toLowerCase().includes(needle);
+  });
 
   const stat = (label: string, value: number, tone: string) => (
     <Card key={label} className="p-4">
@@ -61,11 +69,25 @@ export function MedicalAlertsPage() {
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {stat("Active critical", active.filter((a) => a.severity === "critical").length, "text-orbit-crit")}
         {stat("Active warnings", active.filter((a) => a.severity === "warning").length, "text-orbit-warn")}
-        {stat("Live detections", alerts.filter((a) => a.live && a.active).length, "text-orbit-cyan")}
+        {stat("Awaiting acknowledgement", active.filter((a) => !a.acknowledged).length, "text-orbit-cyan")}
         {stat("Resolved", alerts.filter((a) => !a.active).length, "text-white")}
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
+        <div className="relative w-full sm:w-64">
+          <label htmlFor="alert-search" className="sr-only">
+            Search by astronaut or alert
+          </label>
+          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-orbit-dim" aria-hidden="true" />
+          <input
+            id="alert-search"
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search astronaut or alert"
+            className="h-10 w-full rounded-lg border border-white/10 bg-transparent pl-9 pr-3 text-sm text-white placeholder:text-orbit-dim focus-visible:outline focus-visible:outline-2 focus-visible:outline-orbit-cyan"
+          />
+        </div>
         <Segmented
           name="alert-status"
           label="Status"
@@ -93,7 +115,9 @@ export function MedicalAlertsPage() {
 
       {shown.length === 0 ? (
         <Card>
-          <p className="text-sm text-orbit-muted">No alerts match these filters.</p>
+          <p className="text-sm text-orbit-muted">
+            No alerts match these filters. Alerts from live monitoring and daily assessments appear here automatically.
+          </p>
         </Card>
       ) : (
         <div className="space-y-3">
@@ -103,6 +127,7 @@ export function MedicalAlertsPage() {
               <AlertCard
                 key={a.id}
                 alert={a}
+                footer={<CaseManager alert={a} />}
                 header={
                   person ? (
                     <Link to={`/medical/astronauts/${person.id}`} className="inline-flex items-center gap-2 text-sm text-white hover:underline">

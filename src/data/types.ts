@@ -98,6 +98,7 @@ export interface DemoAccount {
   name: string;
   title: string;
   astronautId?: string;
+  scenario?: HealthStatus;
   avatarFrom: string;
   avatarTo: string;
 }

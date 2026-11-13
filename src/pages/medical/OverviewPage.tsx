@@ -5,8 +5,9 @@ import { axisTick, chartTooltipStyle } from "@/components/charts/TrendChart";
 import { StatCard } from "@/components/ui/MetricCard";
 import { Avatar, Card, CardHeader, SeverityDot, SimulatedTag } from "@/components/ui/primitives";
 import { astronauts, getAstronaut } from "@/data/astronauts";
-import { alerts, healthEvents } from "@/data/operations";
+import { healthEvents } from "@/data/operations";
 import { statusColor } from "@/lib/health";
+import { useAstronauts, useUnifiedAlerts } from "@/lib/liveData";
 
 const crewTrend = astronauts[0].daily.map((d, i) => ({
   label: d.label,
@@ -14,9 +15,11 @@ const crewTrend = astronauts[0].daily.map((d, i) => ({
 }));
 
 export function MedicalOverviewPage() {
-  const stable = astronauts.filter((a) => a.status === "stable").length;
-  const warning = astronauts.filter((a) => a.status === "warning").length;
-  const critical = astronauts.filter((a) => a.status === "critical").length;
+  const crew = useAstronauts();
+  const alerts = useUnifiedAlerts();
+  const stable = crew.filter((a) => a.status === "stable").length;
+  const warning = crew.filter((a) => a.status === "warning").length;
+  const critical = crew.filter((a) => a.status === "critical").length;
   const criticalAlerts = alerts.filter((a) => a.active && a.severity === "critical").length;
 
   const distribution = [
@@ -28,7 +31,7 @@ export function MedicalOverviewPage() {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Total astronauts" value={astronauts.length} hint="Across 2 active missions" icon={Users} />
+        <StatCard label="Total astronauts" value={crew.length} hint="Across 2 active missions" icon={Users} />
         <StatCard label="Stable" value={stable} hint="Within personal baseline" icon={HeartPulse} color="#20C7A5" />
         <StatCard label="Requiring attention" value={warning + critical} hint={`${warning} warning · ${critical} critical`} icon={AlertTriangle} color="#F59E42" />
         <StatCard label="Critical alerts" value={criticalAlerts} hint="Active, unresolved" icon={ShieldAlert} color="#F0524F" />

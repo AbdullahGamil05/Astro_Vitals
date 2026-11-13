@@ -1,6 +1,6 @@
 import { Lightbulb } from "lucide-react";
 import type { ReactNode } from "react";
-import type { UnifiedAlert } from "@/data/monitoring";
+import type { FollowUpStatus, UnifiedAlert } from "@/data/monitoring";
 import { cn } from "@/lib/health";
 import { liveMetricMeta } from "@/lib/monitoring/config";
 import { SeverityBadge } from "@/components/ui/primitives";
@@ -11,15 +11,22 @@ const otherLabels: Record<string, string> = {
   sleep: "Sleep",
 };
 
+export const followUpLabel: Record<FollowUpStatus, string> = {
+  none: "No follow-up",
+  scheduled: "Follow-up scheduled",
+  in_progress: "Follow-up in progress",
+  completed: "Follow-up completed",
+};
+
 export function metricLabel(metric: UnifiedAlert["relatedMetric"]): string {
   return metric in liveMetricMeta ? liveMetricMeta[metric as keyof typeof liveMetricMeta].label : (otherLabels[metric] ?? metric);
 }
 
 const accent = { critical: "border-l-orbit-crit", warning: "border-l-orbit-warn", info: "border-l-orbit-cyan" } as const;
 
-export function AlertCard({ alert, header }: { alert: UnifiedAlert; header?: ReactNode }) {
+export function AlertCard({ alert, header, footer }: { alert: UnifiedAlert; header?: ReactNode; footer?: ReactNode }) {
   return (
-    <article className={cn("orbit-card border-l-2 p-4", accent[alert.severity], !alert.active && "opacity-70")}>
+    <article className={cn("orbit-card border-l-2 p-4", accent[alert.severity], !alert.active && "opacity-80")}>
       <div className="flex flex-wrap items-center gap-2">
         <SeverityBadge severity={alert.severity} />
         <span
@@ -35,6 +42,16 @@ export function AlertCard({ alert, header }: { alert: UnifiedAlert; header?: Rea
             Live detection
           </span>
         ) : null}
+        {alert.acknowledged ? (
+          <span className="rounded-full border border-orbit-teal/30 bg-orbit-teal/10 px-2 py-0.5 text-[11px] font-medium text-orbit-teal">
+            Acknowledged
+          </span>
+        ) : null}
+        {alert.followUp && alert.followUp !== "none" ? (
+          <span className="rounded-full border border-white/10 px-2 py-0.5 text-[11px] font-medium text-orbit-muted">
+            {followUpLabel[alert.followUp]}
+          </span>
+        ) : null}
         <span className="ml-auto text-xs text-orbit-muted">{alert.timeLabel}</span>
       </div>
       {header ? <div className="mt-3">{header}</div> : null}
@@ -48,6 +65,7 @@ export function AlertCard({ alert, header }: { alert: UnifiedAlert; header?: Rea
           {alert.recommendedAction}
         </p>
       </div>
+      {footer ? <div className="mt-3 border-t border-orbit-line pt-3">{footer}</div> : null}
     </article>
   );
 }

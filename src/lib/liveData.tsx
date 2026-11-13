@@ -11,8 +11,12 @@ import {
 import { astronauts as staticAstronauts } from "@/data/astronauts";
 import { staticAlertMeta } from "@/data/alertMeta";
 import { alerts as staticAlerts } from "@/data/operations";
+import { BONUS_POINTS, engagementSeed, MEASUREMENT_TARGET, TASKS, type AwardEvent, type TaskId } from "@/data/gamification";
+import { dayKey, startOfDay, type Ledger } from "@/lib/engagement";
 import type {
+  AlertCase,
   AssessmentAnswers,
+  FollowUpStatus,
   LiveAlert,
   Sample,
   ScenarioId,
@@ -40,6 +44,10 @@ interface LiveState {
   alerts: LiveAlert[];
   assessments: SubmittedAssessment[];
   sessions: Record<string, Session>;
+  engagement: Ledger;
+  cases: Record<string, AlertCase>;
+  /** Recent point awards, used to announce them. Not persisted. */
+  feed: AwardEvent[];
 }
 
 type Action =
@@ -48,16 +56,30 @@ type Action =
   | { type: "scenario"; id: string; scenario: ScenarioId }
   | { type: "tick"; id: string; sample: Sample }
   | { type: "assessment"; assessment: SubmittedAssessment }
+  | { type: "task"; id: string; task: TaskId; now: number }
+  | { type: "acknowledge"; alertId: string; by: string; now: number }
+  | { type: "followUp"; alertId: string; status: FollowUpStatus }
+  | { type: "note"; alertId: string; author: string; text: string; now: number }
   | { type: "reset"; now: number };
 
 const idleSession: Session = { running: false, scenario: "nominal", scenarioTick: 0, tick: 0 };
+const emptyCase: AlertCase = { followUp: "none", notes: [] };
 
 function load(): LiveState {
-  const fresh: LiveState = { anchor: Date.now(), samples: {}, alerts: [], assessments: [], sessions: {} };
+  const fresh: LiveState = {
+    anchor: Date.now(),
+    samples: {},
+    alerts: [],
+    assessments: [],
+    sessions: {},
+    engagement: {},
+    cases: {},
+    feed: [],
+  };
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return fresh;
-    const parsed = JSON.parse(raw) as Partial<Pick<LiveState, "anchor" | "samples" | "alerts" | "assessments">>;
+    const parsed = JSON.parse(raw) as Partial<Pick<LiveState, "anchor" | "samples" | "alerts" | "assessments" | "engagement" | "cases">>;
     if (typeof parsed.anchor !== "number") return fresh;
     const cutoff = Date.now() - DAY_MS;
     const samples: Record<string, Sample[]> = {};
@@ -70,6 +92,9 @@ function load(): LiveState {
       alerts: parsed.alerts ?? [],
       assessments: parsed.assessments ?? [],
       sessions: {},
+      engagement: parsed.engagement ?? {},
+      cases: parsed.cases ?? {},
+      feed: [],
     };
   } catch {
     return fresh;
@@ -78,8 +103,8 @@ function load(): LiveState {
 
 function save(state: LiveState) {
   try {
-    const { anchor, samples, alerts, assessments } = state;
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ anchor, samples, alerts, assessments }));
+    const { anchor, samples, alerts, assessments, engagement, cases } = state;
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ anchor, samples, alerts, assessments, engagement, cases }));
   } catch {
     // Storage may be full or unavailable; the in-memory state continues to work.
   }
@@ -102,8 +127,46 @@ function patchSession(state: LiveState, id: string, patch: Partial<Session>): Li
   return { ...state, sessions: { ...state.sessions, [id]: { ...current, ...patch } } };
 }
 
+function awardTask(state: LiveState, astronautId: string, task: TaskId, now: number): LiveState {
+  const key = dayKey(now);
+  const logged = state.engagement[astronautId]?.[key] ?? [];
+  const seeded = engagementSeed[astronautId]?.today ?? [];
+  if (logged.includes(task) || seeded.includes(task)) return state;
+
+  const nextLogged = [...logged, task];
+  const done = new Set<TaskId>([...seeded, ...nextLogged]);
+  const def = TASKS.find((t) => t.id === task);
+  if (!def) return state;
+  const events: AwardEvent[] = [{ id: `${astronautId}:${task}:${now}`, astronautId, task, points: def.points, ts: now }];
+  if (TASKS.every((t) => done.has(t.id))) {
+    events.push({ id: `${astronautId}:bonus:${now}`, astronautId, task: "bonus", points: BONUS_POINTS, ts: now });
+  }
+  return {
+    ...state,
+    engagement: { ...state.engagement, [astronautId]: { ...state.engagement[astronautId], [key]: nextLogged } },
+    feed: [...state.feed, ...events].slice(-30),
+  };
+}
+
+function patchCase(state: LiveState, alertId: string, patch: (c: AlertCase) => AlertCase): LiveState {
+  return { ...state, cases: { ...state.cases, [alertId]: patch(state.cases[alertId] ?? emptyCase) } };
+}
+
 function reducer(state: LiveState, action: Action): LiveState {
   switch (action.type) {
+    case "task":
+      return awardTask(state, action.id, action.task, action.now);
+    case "acknowledge":
+      return patchCase(state, action.alertId, (c) =>
+        c.acknowledgedAt ? c : { ...c, acknowledgedAt: action.now, acknowledgedBy: action.by, followUp: c.followUp === "none" ? "scheduled" : c.followUp },
+      );
+    case "followUp":
+      return patchCase(state, action.alertId, (c) => ({ ...c, followUp: action.status }));
+    case "note":
+      return patchCase(state, action.alertId, (c) => ({
+        ...c,
+        notes: [{ id: `n${action.now}-${c.notes.length}`, author: action.author, ts: action.now, text: action.text }, ...c.notes],
+      }));
     case "start":
       return patchSession(state, action.id, { running: true, startedAt: action.now, stoppedAt: undefined });
     case "stop":
@@ -115,7 +178,7 @@ function reducer(state: LiveState, action: Action): LiveState {
       if (!session.running) return state;
       const live = [...(state.samples[action.id] ?? []), action.sample].slice(-MAX_LIVE_SAMPLES);
       const alerts = evaluateAlerts(action.id, baselineFor(action.id), live.slice(-15), state.alerts);
-      return {
+      const next: LiveState = {
         ...state,
         samples: { ...state.samples, [action.id]: live },
         alerts,
@@ -124,17 +187,30 @@ function reducer(state: LiveState, action: Action): LiveState {
           [action.id]: { ...session, tick: session.tick + 1, scenarioTick: session.scenarioTick + 1 },
         },
       };
+      const dayStart = startOfDay(action.sample.ts);
+      const today = live.reduce((n, s) => (s.ts >= dayStart ? n + 1 : n), 0);
+      return today >= MEASUREMENT_TARGET ? awardTask(next, action.id, "measurements", action.sample.ts) : next;
     }
     case "assessment": {
       const alert = alertForAssessment(action.assessment);
-      return {
+      const next: LiveState = {
         ...state,
         assessments: [action.assessment, ...state.assessments],
         alerts: alert ? [alert, ...state.alerts] : state.alerts,
       };
+      return awardTask(next, action.assessment.astronautId, "assessment", action.assessment.submittedAt);
     }
     case "reset":
-      return { anchor: action.now, samples: {}, alerts: [], assessments: [], sessions: {} };
+      return {
+        anchor: action.now,
+        samples: {},
+        alerts: [],
+        assessments: [],
+        sessions: {},
+        engagement: {},
+        cases: {},
+        feed: [],
+      };
   }
 }
 
@@ -144,6 +220,10 @@ interface LiveContextValue {
   stop: (id: string) => void;
   setScenario: (id: string, scenario: ScenarioId) => void;
   submitAssessment: (id: string, answers: AssessmentAnswers) => SubmittedAssessment;
+  completeTask: (id: string, task: TaskId) => void;
+  acknowledgeAlert: (alertId: string, by: string) => void;
+  setFollowUp: (alertId: string, status: FollowUpStatus) => void;
+  addNote: (alertId: string, author: string, text: string) => void;
   reset: () => void;
 }
 
@@ -192,9 +272,20 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
     return assessment;
   }, []);
 
+  const completeTask = useCallback((id: string, task: TaskId) => dispatch({ type: "task", id, task, now: Date.now() }), []);
+  const acknowledgeAlert = useCallback(
+    (alertId: string, by: string) => dispatch({ type: "acknowledge", alertId, by, now: Date.now() }),
+    [],
+  );
+  const setFollowUp = useCallback((alertId: string, status: FollowUpStatus) => dispatch({ type: "followUp", alertId, status }), []);
+  const addNote = useCallback(
+    (alertId: string, author: string, text: string) => dispatch({ type: "note", alertId, author, text, now: Date.now() }),
+    [],
+  );
+
   const value = useMemo(
-    () => ({ state, start, stop, setScenario, submitAssessment, reset }),
-    [state, start, stop, setScenario, submitAssessment, reset],
+    () => ({ state, start, stop, setScenario, submitAssessment, completeTask, acknowledgeAlert, setFollowUp, addNote, reset }),
+    [state, start, stop, setScenario, submitAssessment, completeTask, acknowledgeAlert, setFollowUp, addNote, reset],
   );
   return <LiveContext.Provider value={value}>{children}</LiveContext.Provider>;
 }
@@ -319,6 +410,16 @@ export function useUnifiedAlerts(astronautId?: string): UnifiedAlert[] {
     }));
     return [...live, ...fixed]
       .filter((a) => !astronautId || a.astronautId === astronautId)
+      .map((a) => {
+        const handled = state.cases[a.id];
+        if (!handled) return a;
+        return {
+          ...a,
+          acknowledged: Boolean(handled.acknowledgedAt),
+          followUp: handled.followUp,
+          active: a.active && handled.followUp !== "completed",
+        };
+      })
       .map((a, index) => ({ a, index }))
       .sort((x, y) => {
         if (x.a.active !== y.a.active) return x.a.active ? -1 : 1;
@@ -327,5 +428,23 @@ export function useUnifiedAlerts(astronautId?: string): UnifiedAlert[] {
         return (y.a.timestamp ?? 0) - (x.a.timestamp ?? 0) || x.index - y.index;
       })
       .map((x) => x.a);
-  }, [state.alerts, astronautId]);
+  }, [state.alerts, state.cases, astronautId]);
+}
+
+export function useAlertCases(): Record<string, AlertCase> {
+  return useLive().state.cases;
+}
+
+export function useAwardFeed(): AwardEvent[] {
+  return useLive().state.feed;
+}
+
+/** Live readings collected today, used for the measurement task. */
+export function useTodayReadings(id: string | undefined): number {
+  const { state } = useLive();
+  const live = id ? state.samples[id] : undefined;
+  return useMemo(() => {
+    const start = startOfDay(Date.now());
+    return (live ?? []).reduce((n, s) => (s.ts >= start ? n + 1 : n), 0);
+  }, [live]);
 }

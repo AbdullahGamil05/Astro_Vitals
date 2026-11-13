@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnalysisView } from "@/components/AnalysisView";
 import { Card } from "@/components/ui/primitives";
 import { useAuth } from "@/lib/auth";
+import { useLive } from "@/lib/liveData";
 import { requestAnalysis, isRemoteConfigured, type AnalysisResult } from "@/services/ai/client";
 import type { AnalysisRequest } from "@/services/ai/schema";
 import { useAnalysisRequestBuilder } from "@/services/ai/useAnalysisRequest";
@@ -21,6 +22,7 @@ const sourceNote = {
 
 export function AiAnalysisPage() {
   const { user } = useAuth();
+  const { completeTask } = useLive();
   const build = useAnalysisRequestBuilder(user?.astronautId);
   const [run, setRun] = useState<RunState>({ status: "idle" });
   const controller = useRef<AbortController | null>(null);
@@ -35,11 +37,14 @@ export function AiAnalysisPage() {
     setRun({ status: "loading" });
     try {
       const result = await requestAnalysis(request, ctl.signal);
-      if (!ctl.signal.aborted) setRun({ status: "done", result, request });
+      if (!ctl.signal.aborted) {
+        setRun({ status: "done", result, request });
+        if (user?.astronautId) completeTask(user.astronautId, "aiReview");
+      }
     } catch (e) {
       if (!ctl.signal.aborted) setRun({ status: "error", message: e instanceof Error ? e.message : "Analysis failed." });
     }
-  }, [build]);
+  }, [build, completeTask, user?.astronautId]);
 
   analyseRef.current = analyse;
 

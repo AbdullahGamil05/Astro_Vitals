@@ -2,9 +2,9 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Bell, ChevronDown, LogOut, Menu, UserRound } from "lucide-react";
 import { Avatar, SeverityDot } from "@/components/ui/primitives";
-import { alerts } from "@/data/operations";
 import { getAstronaut } from "@/data/astronauts";
 import { useAuth } from "@/lib/auth";
+import { useUnifiedAlerts } from "@/lib/liveData";
 import { pageTitleFor } from "./navigation";
 
 function Popover({
@@ -54,12 +54,11 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
   const { user, logout } = useAuth();
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const liveAlerts = useUnifiedAlerts(user?.role === "astronaut" ? user.astronautId : undefined);
   if (!user) return null;
 
   const title = pageTitleFor(pathname, user.role);
-  const relevantAlerts = alerts
-    .filter((a) => a.active && (user.role === "medical" || a.astronautId === user.astronautId))
-    .slice(0, 4);
+  const relevantAlerts = liveAlerts.filter((a) => a.active).slice(0, 4);
   const profilePath = user.role === "astronaut" ? "/astronaut/profile" : "/medical/directory";
 
   return (
@@ -110,7 +109,7 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
                       <p className="text-sm font-medium text-white">{a.title}</p>
                       <p className="text-xs text-orbit-muted">
                         {user.role === "medical" ? `${getAstronaut(a.astronautId)?.name} · ` : ""}
-                        {a.time}
+                        {a.timeLabel}
                       </p>
                     </div>
                   </li>
