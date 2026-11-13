@@ -32,10 +32,13 @@ export function LoginPage() {
 
       <div className="relative w-full max-w-md">
         <div className="mb-8 flex flex-col items-center text-center">
-          <LogoMark size={52} />
-          <h1 className="mt-4 text-3xl font-semibold tracking-[0.28em] text-white">ORBIT</h1>
+          <LogoMark size={72} />
+          <h1 className="mt-4 font-display text-5xl font-bold tracking-[0.3em] text-white">ORBIT</h1>
           <p className="mt-2 text-sm text-orbit-muted">Astronaut health monitoring and medical decision support</p>
-          <p className="mt-1 font-mono text-[11px] uppercase tracking-wider text-orbit-dim">NASA Space Apps Challenge 2026</p>
+          <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-nasa-red/40 bg-nasa-red/10 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-white">
+            <span className="size-1.5 rounded-full bg-nasa-red" aria-hidden="true" />
+            NASA Space Apps Challenge 2026
+          </p>
         </div>
 
         <div className="orbit-card orbit-glow p-6 sm:p-7">
@@ -78,7 +81,7 @@ export function LoginPage() {
 
             <button
               type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-orbit-cyan to-orbit-teal px-4 py-2.5 text-sm font-semibold text-orbit-bg transition hover:brightness-110"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-nasa-red-deep px-4 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-white shadow-[0_0_24px_-6px_#fc3d21] transition hover:bg-nasa-red"
             >
               Sign in to mission console
               <ArrowRight className="size-4" aria-hidden="true" />

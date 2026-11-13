@@ -92,7 +92,7 @@ export const astronauts: Astronaut[] = [
     lastMeasurement: "6 min ago",
     lastAssessment: "Today, 07:30 UTC",
     points: 1240,
-    avatarFrom: "#28C5D8",
+    avatarFrom: "#4A90FF",
     avatarTo: "#2563EB",
     hourly: buildHourly(
       { heartRate: 64, spo2: 98, temperature: 36.7, respiratoryRate: 14 },
@@ -243,7 +243,7 @@ export const astronauts: Astronaut[] = [
     lastAssessment: "Today, 08:05 UTC",
     points: 1010,
     avatarFrom: "#8B5CF6",
-    avatarTo: "#28C5D8",
+    avatarTo: "#4A90FF",
     hourly: buildHourly(
       { heartRate: 71, spo2: 98, temperature: 36.6, respiratoryRate: 15 },
       {

@@ -71,7 +71,7 @@ export function Sidebar({ role, collapsed, mobileOpen, onToggleCollapsed, onClos
               {({ isActive }) => (
                 <>
                   {isActive ? (
-                    <span className="absolute -left-3 top-2 bottom-2 w-0.5 rounded-full bg-orbit-cyan shadow-[0_0_10px_#28C5D8]" />
+                    <span className="absolute -left-3 top-2 bottom-2 w-0.5 rounded-full bg-nasa-red shadow-[0_0_10px_#fc3d21]" />
                   ) : null}
                   <Icon className={cn("size-[18px] shrink-0", isActive && "text-orbit-cyan")} aria-hidden="true" />
                   <span className={cn(collapsed && "lg:sr-only")}>{label}</span>

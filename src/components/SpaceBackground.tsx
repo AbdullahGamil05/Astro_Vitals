@@ -60,7 +60,7 @@ function buildNebula(w: number, h: number): HTMLCanvasElement {
   if (!nctx) return nebula;
 
   const blobs: Array<[number, number, number, string, number]> = [
-    [0.12, 0.2, 0.6, "40,197,216", 0.2],
+    [0.12, 0.2, 0.6, "74,144,255", 0.2],
     [0.86, 0.12, 0.55, "92,72,204", 0.2],
     [0.55, 0.88, 0.65, "32,199,165", 0.13],
     [0.28, 0.72, 0.45, "60,104,224", 0.16],
@@ -183,8 +183,8 @@ export function SpaceBackground() {
       ctx.globalAlpha = 0.92;
 
       const glow = ctx.createRadialGradient(0, 0, R * 0.85, 0, 0, R * 1.75);
-      glow.addColorStop(0, "rgba(40,197,216,0.24)");
-      glow.addColorStop(1, "rgba(40,197,216,0)");
+      glow.addColorStop(0, "rgba(74,144,255,0.24)");
+      glow.addColorStop(1, "rgba(74,144,255,0)");
       ctx.fillStyle = glow;
       ctx.beginPath();
       ctx.arc(0, 0, R * 1.75, 0, TAU);
@@ -330,7 +330,7 @@ export function SpaceBackground() {
         for (let i = 0; i < near.length; i++) {
           const a = near[i];
           if (!a) continue;
-          ctx.strokeStyle = `rgba(40,197,216,${(1 - a.d / 130) * 0.55})`;
+          ctx.strokeStyle = `rgba(74,144,255,${(1 - a.d / 130) * 0.55})`;
           ctx.beginPath();
           ctx.moveTo(pointer.px, pointer.py);
           ctx.lineTo(a.x, a.y);
@@ -340,7 +340,7 @@ export function SpaceBackground() {
             if (!b) continue;
             const d = Math.hypot(a.x - b.x, a.y - b.y);
             if (d < 90) {
-              ctx.strokeStyle = `rgba(40,197,216,${(1 - d / 90) * 0.4})`;
+              ctx.strokeStyle = `rgba(74,144,255,${(1 - d / 90) * 0.4})`;
               ctx.beginPath();
               ctx.moveTo(a.x, a.y);
               ctx.lineTo(b.x, b.y);
@@ -384,7 +384,7 @@ export function SpaceBackground() {
         const g = ctx.createLinearGradient(m.x, m.y, tx, ty);
         g.addColorStop(0, `rgba(255,255,255,${fade})`);
         g.addColorStop(0.3, `rgba(120,230,245,${fade * 0.5})`);
-        g.addColorStop(1, "rgba(40,197,216,0)");
+        g.addColorStop(1, "rgba(74,144,255,0)");
         ctx.strokeStyle = g;
         ctx.lineWidth = 1.6;
         ctx.beginPath();
@@ -408,7 +408,7 @@ export function SpaceBackground() {
           continue;
         }
         const p = r.age / 1.2;
-        ctx.strokeStyle = `rgba(40,197,216,${(1 - p) * 0.5})`;
+        ctx.strokeStyle = `rgba(74,144,255,${(1 - p) * 0.5})`;
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.arc(r.x, r.y, p * 160, 0, TAU);

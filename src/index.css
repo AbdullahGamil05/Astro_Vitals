@@ -1,19 +1,23 @@
 @import "tailwindcss";
 
 @theme {
-  --color-orbit-bg: #08111f;
-  --color-orbit-card: #111e30;
-  --color-orbit-card-2: #162840;
-  --color-orbit-side: #0b1626;
-  --color-orbit-cyan: #28c5d8;
+  --color-orbit-bg: #04070f;
+  --color-orbit-card: #0a1222;
+  --color-orbit-card-2: #101c34;
+  --color-orbit-side: #070d1a;
+  --color-orbit-cyan: #4a90ff;
   --color-orbit-teal: #20c7a5;
-  --color-orbit-muted: #8aa0ba;
-  --color-orbit-dim: #5d7390;
+  --color-orbit-muted: #9db0cc;
+  --color-orbit-dim: #6a7fa0;
   --color-orbit-warn: #f59e42;
   --color-orbit-crit: #f0524f;
-  --color-orbit-line: rgb(255 255 255 / 0.07);
+  --color-orbit-line: rgb(255 255 255 / 0.08);
+  --color-nasa-blue: #0b3d91;
+  --color-nasa-red: #fc3d21;
+  --color-nasa-red-deep: #de3118;
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Barlow Condensed", "Barlow", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
@@ -37,7 +41,7 @@
   }
 
   ::selection {
-    background: rgb(40 197 216 / 0.35);
+    background: rgb(74 144 255 / 0.35);
   }
 
   :focus-visible {
@@ -57,11 +61,18 @@
 
 @layer components {
   .orbit-card {
-    background-image: linear-gradient(180deg, rgb(255 255 255 / 0.025), rgb(255 255 255 / 0));
+    background-image:
+      linear-gradient(90deg, rgb(11 61 145 / 0.55), rgb(11 61 145 / 0) 38%),
+      linear-gradient(180deg, rgb(255 255 255 / 0.025), rgb(255 255 255 / 0));
+    background-size: 100% 2px, 100% 100%;
+    background-repeat: no-repeat;
     @apply rounded-xl border border-orbit-line bg-orbit-card/80;
   }
+  .orbit-title {
+    @apply font-display font-semibold uppercase tracking-[0.12em];
+  }
   .orbit-glow {
-    box-shadow: 0 0 0 1px rgb(40 197 216 / 0.15), 0 8px 32px -12px rgb(40 197 216 / 0.35);
+    box-shadow: 0 0 0 1px rgb(74 144 255 / 0.15), 0 8px 32px -12px rgb(74 144 255 / 0.35);
   }
   .orbit-eyebrow {
     @apply font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-orbit-dim;

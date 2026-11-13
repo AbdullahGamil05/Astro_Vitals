@@ -9,7 +9,7 @@ export const demoAccounts: DemoAccount[] = [
     name: "Elena Vasquez",
     title: "Mission Commander",
     astronautId: "a1",
-    avatarFrom: "#28C5D8",
+    avatarFrom: "#4A90FF",
     avatarTo: "#2563EB",
   },
   {
