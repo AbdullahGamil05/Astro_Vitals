@@ -86,7 +86,7 @@ export function LoginPage() {
           </form>
 
           <div className="mt-6 border-t border-orbit-line pt-5">
-            <p className="orbit-eyebrow mb-3">Demo accounts — click to fill</p>
+            <p className="orbit-eyebrow mb-3">Demo accounts</p>
             <div className="grid gap-2.5">
               {demoAccounts.map((acc) => {
                 const Icon = acc.role === "astronaut" ? UserRound : Stethoscope;
@@ -117,7 +117,7 @@ export function LoginPage() {
 
         <p className="mt-5 flex items-start justify-center gap-2 rounded-md bg-[#06080F]/80 px-3 py-2 text-center text-xs text-orbit-muted backdrop-blur-sm">
           <ShieldAlert className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
-          Demo authentication for prototype purposes only. Not secure. All health data is simulated.
+          Demo authentication for prototype purposes only. All data is simulated.
         </p>
       </div>
     </div>
