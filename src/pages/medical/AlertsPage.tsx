@@ -131,7 +131,7 @@ export function MedicalAlertsPage() {
                 header={
                   person ? (
                     <Link to={`/medical/astronauts/${person.id}`} className="inline-flex items-center gap-2 text-sm text-ink hover:underline">
-                      <Avatar name={person.name} from={person.avatarFrom} to={person.avatarTo} size={24} />
+                      <Avatar name={person.name} src={person.photo} from={person.avatarFrom} to={person.avatarTo} size={32} />
                       {person.name}
                     </Link>
                   ) : null

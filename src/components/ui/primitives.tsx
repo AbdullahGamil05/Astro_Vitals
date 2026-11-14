@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { initials, statusLabel } from "@/data/astronauts";
 import type { AlertSeverity, HealthStatus } from "@/data/types";
 import { cn, statusColor, statusSoftBg, statusText } from "@/lib/health";
@@ -37,27 +37,73 @@ export function CardHeader({
 
 export function Avatar({
   name,
+  src,
   from,
   to,
-  size = 36,
+  size = 40,
+  online = true,
 }: {
   name: string;
+  src?: string;
   from: string;
   to: string;
   size?: number;
+  online?: boolean;
 }) {
+  const [failed, setFailed] = useState(false);
+  const showPhoto = Boolean(src) && !failed;
+  const large = size >= 64;
+  // Small avatars zoom in on the face; large frames show the suit and shoulders.
+  const zoom = size < 56 ? 1.4 : 1.12;
+  const dot = Math.min(18, Math.max(8, Math.round(size * 0.2)));
+  // Centers the dot on the circle's edge at 45 degrees.
+  const dotOffset = size * 0.146 - dot / 2;
+
   return (
-    <span
-      aria-hidden="true"
-      className="inline-flex shrink-0 items-center justify-center rounded-full font-mono font-medium text-ink ring-1 ring-white/15"
-      style={{
-        width: size,
-        height: size,
-        fontSize: size * 0.36,
-        backgroundImage: `linear-gradient(135deg, ${from}, ${to})`,
-      }}
-    >
-      {initials(name)}
+    <span aria-hidden="true" className="relative inline-flex shrink-0" style={{ width: size, height: size }}>
+      <span
+        className={cn(
+          "size-full overflow-hidden rounded-full border-sky-400/40 bg-orbit-card-2",
+          large
+            ? "border-2 shadow-[0_0_0_1px_rgb(56_189_248/0.14),0_0_22px_rgb(56_189_248/0.32)]"
+            : "border shadow-[0_0_10px_rgb(56_189_248/0.25)]",
+        )}
+      >
+        {showPhoto && src ? (
+          <img
+            src={src}
+            srcSet={`${src.replace(/(\.\w+)$/, "-160$1")} 160w, ${src} 640w`}
+            sizes={`${Math.round(size * zoom)}px`}
+            width={size}
+            height={size}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            draggable={false}
+            onError={() => setFailed(true)}
+            className="size-full select-none object-cover object-top"
+            style={{ transform: `scale(${zoom})`, transformOrigin: "50% 22%" }}
+          />
+        ) : (
+          <span
+            className="flex size-full items-center justify-center font-mono font-medium text-ink"
+            style={{ fontSize: size * 0.36, backgroundImage: `linear-gradient(135deg, ${from}, ${to})` }}
+          >
+            {initials(name)}
+          </span>
+        )}
+      </span>
+      {online ? (
+        <span
+          className="absolute flex"
+          style={{ width: dot, height: dot, right: dotOffset, bottom: dotOffset }}
+        >
+          {large ? (
+            <span className="absolute inset-0 rounded-full bg-orbit-teal opacity-60 motion-safe:animate-ping" />
+          ) : null}
+          <span className="relative size-full rounded-full border-2 border-orbit-bg bg-orbit-teal shadow-[0_0_6px_rgb(63_191_159/0.9)]" />
+        </span>
+      ) : null}
     </span>
   );
 }

@@ -47,7 +47,7 @@ export function AstronautProfileView({ astronaut: a, backTo }: { astronaut: Astr
           style={{ backgroundColor: statusColor[a.status] }}
         />
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center">
-          <Avatar name={a.name} from={a.avatarFrom} to={a.avatarTo} size={72} />
+          <Avatar name={a.name} src={a.photo} from={a.avatarFrom} to={a.avatarTo} size={112} />
           <div className="flex-1">
             <h2 className="text-2xl font-semibold text-ink">{a.name}</h2>
             <p className="mt-0.5 text-sm text-orbit-muted">

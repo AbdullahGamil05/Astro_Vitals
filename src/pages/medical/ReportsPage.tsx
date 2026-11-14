@@ -146,7 +146,7 @@ export function ReportsPage() {
                   <tr key={r.id} className="hover:bg-white/[0.02]">
                     <td className="py-3 pr-3">
                       <Link to={`/medical/astronauts/${r.id}`} className="flex items-center gap-2.5 text-ink hover:underline">
-                        <Avatar name={a.name} from={a.avatarFrom} to={a.avatarTo} size={28} />
+                        <Avatar name={a.name} src={a.photo} from={a.avatarFrom} to={a.avatarTo} size={40} />
                         {r.name}
                       </Link>
                     </td>

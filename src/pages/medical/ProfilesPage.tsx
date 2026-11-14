@@ -13,11 +13,12 @@ export function ProfilesPage() {
           to={`/medical/astronauts/${a.id}`}
           className="orbit-card group p-5 transition hover:border-orbit-cyan/40 hover:bg-orbit-card-2"
         >
-          <div className="flex items-center gap-3">
-            <Avatar name={a.name} from={a.avatarFrom} to={a.avatarTo} size={48} />
+          <div className="flex items-center gap-4">
+            <Avatar name={a.name} src={a.photo} from={a.avatarFrom} to={a.avatarTo} size={96} />
             <div className="min-w-0">
-              <p className="truncate font-medium text-ink">{a.name}</p>
+              <p className="truncate font-display text-base font-semibold tracking-tight text-ink">{a.name}</p>
               <p className="truncate text-xs text-orbit-muted">{a.title}</p>
+              <p className="mt-1.5 font-mono text-[11px] uppercase tracking-wider text-orbit-dim">{a.crewId}</p>
             </div>
           </div>
           <div className="mt-4 flex items-center justify-between">

@@ -16,7 +16,7 @@ export function LeaderboardPage() {
         <Card glow>
           <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
             <div className="flex items-center gap-4">
-              <Avatar name={mine.astronaut.name} from={mine.astronaut.avatarFrom} to={mine.astronaut.avatarTo} size={52} />
+              <Avatar name={mine.astronaut.name} src={mine.astronaut.photo} from={mine.astronaut.avatarFrom} to={mine.astronaut.avatarTo} size={80} />
               <div>
                 <p className="orbit-eyebrow">Your position</p>
                 <p className="font-mono text-3xl font-semibold text-ink">
@@ -70,7 +70,7 @@ export function LeaderboardPage() {
                     </td>
                     <td className="py-3 pr-4">
                       <div className="flex items-center gap-3">
-                        <Avatar name={e.astronaut.name} from={e.astronaut.avatarFrom} to={e.astronaut.avatarTo} size={32} />
+                        <Avatar name={e.astronaut.name} src={e.astronaut.photo} from={e.astronaut.avatarFrom} to={e.astronaut.avatarTo} size={44} />
                         <div className="min-w-0">
                           <p className="truncate font-medium text-ink">
                             {e.astronaut.name}
