@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { AlertCircle, ArrowRight, ShieldAlert, Stethoscope, UserRound } from "lucide-react";
-import { LogoMark } from "@/components/Logo";
+import { BrandName, LogoMark } from "@/components/Logo";
 import { homePathFor, useAuth } from "@/lib/auth";
 import { demoAccounts } from "@/data/operations";
 
@@ -32,9 +32,11 @@ export function LoginPage() {
 
       <div className="relative w-full max-w-md">
         <div className="mb-8 flex flex-col items-center text-center">
-          <LogoMark size={72} />
-          <h1 className="mt-4 font-display text-5xl font-semibold tracking-tight text-ink">AstroVitals</h1>
-          <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-nasa-red">NASA Health Command</p>
+          <LogoMark size={96} />
+          <h1 className="mt-5 text-5xl leading-none sm:text-6xl">
+            <BrandName />
+          </h1>
+          <p className="mt-3 font-mono text-[11px] font-medium uppercase tracking-[0.24em] text-nasa-red">NASA Health Command</p>
           <p className="mt-2 text-sm text-orbit-muted [text-shadow:0_1px_10px_#06080F]">Astronaut health monitoring and medical decision support</p>
         </div>
 

@@ -136,9 +136,10 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
             onClick={toggle}
             aria-expanded={open}
             aria-haspopup="menu"
-            className="flex items-center gap-2.5 rounded-lg py-1 pl-1 pr-2 hover:bg-white/5"
+            aria-label={`Account menu for ${user.name}`}
+            className="flex items-center gap-3 rounded-lg py-1 pl-1 pr-2 hover:bg-white/5"
           >
-            <Avatar name={user.name} from={user.avatarFrom} to={user.avatarTo} size={34} />
+            <Avatar name={user.name} src={user.photo} from={user.avatarFrom} to={user.avatarTo} size={44} />
             <span className="hidden text-left sm:block">
               <span className="block text-sm font-medium leading-tight text-ink">{user.name}</span>
               <span className="block text-xs capitalize leading-tight text-orbit-muted">
@@ -151,10 +152,13 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
       >
         {(close) => (
           <div role="menu">
-            <div className="border-b border-orbit-line px-2 pb-3 pt-1">
-              <p className="text-sm font-medium text-ink">{user.name}</p>
-              <p className="text-xs text-orbit-muted">{user.title}</p>
-              <p className="mt-0.5 font-mono text-[11px] text-orbit-dim">{user.loginId}</p>
+            <div className="flex items-center gap-3 border-b border-orbit-line px-2 pb-3 pt-2">
+              <Avatar name={user.name} src={user.photo} from={user.avatarFrom} to={user.avatarTo} size={64} />
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-ink">{user.name}</p>
+                <p className="truncate text-xs text-orbit-muted">{user.title}</p>
+                <p className="mt-0.5 font-mono text-[11px] text-orbit-dim">{user.loginId}</p>
+              </div>
             </div>
             <Link
               to={profilePath}

@@ -40,7 +40,7 @@ export function AstronautHomePage() {
         <div className="pointer-events-none absolute -right-20 -top-24 size-80 rounded-full bg-orbit-cyan/15 blur-3xl" />
         <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-4">
-            <Avatar name={me.name} from={me.avatarFrom} to={me.avatarTo} size={64} />
+            <Avatar name={me.name} src={me.photo} from={me.avatarFrom} to={me.avatarTo} size={96} />
             <div>
               <p className="orbit-eyebrow">Crew console</p>
               <h2 className="mt-1 text-2xl font-semibold text-ink text-balance">Welcome back, {firstName}</h2>
@@ -227,7 +227,7 @@ export function AstronautHomePage() {
                   <span className="w-5 text-center font-mono text-sm text-orbit-muted">
                     {e.rank === 1 ? <Trophy className="mx-auto size-4 text-orbit-warn" aria-label="First place" /> : e.rank}
                   </span>
-                  <Avatar name={e.astronaut.name} from={e.astronaut.avatarFrom} to={e.astronaut.avatarTo} size={28} />
+                  <Avatar name={e.astronaut.name} src={e.astronaut.photo} from={e.astronaut.avatarFrom} to={e.astronaut.avatarTo} size={40} />
                   <span className="min-w-0 flex-1 truncate text-sm text-ink">{e.astronaut.name}</span>
                   <span className="font-mono text-sm text-orbit-cyan">{e.engagement.totalPoints}</span>
                 </li>
