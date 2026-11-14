@@ -11,6 +11,7 @@ export const demoAccounts: DemoAccount[] = [
     astronautId: "a1",
     avatarFrom: "#3B82F6",
     avatarTo: "#2563EB",
+    avatarUrl: "/avatars/elena-vasquez.png",
   },
   {
     loginId: "ORBIT-M01",
@@ -20,6 +21,7 @@ export const demoAccounts: DemoAccount[] = [
     title: "Flight Surgeon",
     avatarFrom: "#3FBF9F",
     avatarTo: "#0E7490",
+    avatarUrl: "/avatars/marcus-reyes.png",
   },
 ];
 

@@ -14,7 +14,7 @@ export function ProfilesPage() {
           className="orbit-card group p-5 transition hover:border-orbit-cyan/40 hover:bg-orbit-card-2"
         >
           <div className="flex items-center gap-3">
-            <Avatar name={a.name} from={a.avatarFrom} to={a.avatarTo} size={48} />
+            <Avatar name={a.name} from={a.avatarFrom} to={a.avatarTo} src={a.avatarUrl} size={48} />
             <div className="min-w-0">
               <p className="truncate font-medium text-ink">{a.name}</p>
               <p className="truncate text-xs text-orbit-muted">{a.title}</p>

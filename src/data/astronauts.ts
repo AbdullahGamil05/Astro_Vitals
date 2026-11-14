@@ -94,6 +94,7 @@ export const astronauts: Astronaut[] = [
     points: 1240,
     avatarFrom: "#3B82F6",
     avatarTo: "#2563EB",
+    avatarUrl: "/avatars/elena-vasquez.png",
     hourly: buildHourly(
       { heartRate: 64, spo2: 98, temperature: 36.7, respiratoryRate: 14 },
       {
@@ -132,6 +133,7 @@ export const astronauts: Astronaut[] = [
     points: 1185,
     avatarFrom: "#3FBF9F",
     avatarTo: "#0E7490",
+    avatarUrl: "/avatars/kenji-tanaka.png",
     hourly: buildHourly(
       { heartRate: 68, spo2: 97, temperature: 36.8, respiratoryRate: 15 },
       {
@@ -169,6 +171,7 @@ export const astronauts: Astronaut[] = [
     points: 1090,
     avatarFrom: "#F97316",
     avatarTo: "#DB2777",
+    avatarUrl: "/avatars/amara-okafor.png",
     hourly: buildHourly(
       { heartRate: 102, spo2: 94, temperature: 37.3, respiratoryRate: 20 },
       {
@@ -207,6 +210,7 @@ export const astronauts: Astronaut[] = [
     points: 760,
     avatarFrom: "#EF4444",
     avatarTo: "#7C3AED",
+    avatarUrl: "/avatars/lars-henriksen.png",
     hourly: buildHourly(
       { heartRate: 124, spo2: 90, temperature: 38.2, respiratoryRate: 26 },
       {
@@ -244,6 +248,7 @@ export const astronauts: Astronaut[] = [
     points: 1010,
     avatarFrom: "#8B5CF6",
     avatarTo: "#3B82F6",
+    avatarUrl: "/avatars/priya-nair.png",
     hourly: buildHourly(
       { heartRate: 71, spo2: 98, temperature: 36.6, respiratoryRate: 15 },
       {

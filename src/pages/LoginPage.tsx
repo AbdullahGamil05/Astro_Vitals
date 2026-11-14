@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { AlertCircle, ArrowRight, ShieldAlert, Stethoscope, UserRound } from "lucide-react";
+import { AlertCircle, ArrowRight, ShieldAlert } from "lucide-react";
 import { LogoMark } from "@/components/Logo";
+import { Avatar } from "@/components/ui/primitives";
 import { homePathFor, useAuth } from "@/lib/auth";
 import { demoAccounts } from "@/data/operations";
 
@@ -89,7 +90,6 @@ export function LoginPage() {
             <p className="orbit-eyebrow mb-3">Demo accounts</p>
             <div className="grid gap-2.5">
               {demoAccounts.map((acc) => {
-                const Icon = acc.role === "astronaut" ? UserRound : Stethoscope;
                 return (
                   <button
                     key={acc.loginId}
@@ -97,9 +97,7 @@ export function LoginPage() {
                     onClick={() => fill(acc)}
                     className="flex items-center gap-3 rounded-lg border border-orbit-line bg-white/[0.02] px-3 py-2.5 text-left transition hover:border-orbit-cyan/40 hover:bg-orbit-cyan/5"
                   >
-                    <span className="flex size-9 items-center justify-center rounded-lg bg-orbit-cyan/10 text-orbit-cyan">
-                      <Icon className="size-4" aria-hidden="true" />
-                    </span>
+                    <Avatar name={acc.name} from={acc.avatarFrom} to={acc.avatarTo} src={acc.avatarUrl} size={40} />
                     <span className="min-w-0 flex-1">
                       <span className="block text-sm font-medium text-ink">
                         {acc.role === "astronaut" ? "Astronaut" : "Medical Officer"}

@@ -39,17 +39,19 @@ export function Avatar({
   name,
   from,
   to,
+  src,
   size = 36,
 }: {
   name: string;
   from: string;
   to: string;
+  src?: string;
   size?: number;
 }) {
   return (
     <span
       aria-hidden="true"
-      className="inline-flex shrink-0 items-center justify-center rounded-full font-mono font-medium text-ink ring-1 ring-white/15"
+      className="relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full font-mono font-medium text-ink ring-2 ring-orbit-cyan/50 shadow-[0_0_12px_rgba(41,219,255,0.2)]"
       style={{
         width: size,
         height: size,
@@ -58,6 +60,7 @@ export function Avatar({
       }}
     >
       {initials(name)}
+      {src ? <img src={src} alt="" className="absolute inset-0 size-full object-cover" loading="lazy" decoding="async" /> : null}
     </span>
   );
 }
