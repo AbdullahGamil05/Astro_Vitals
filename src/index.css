@@ -116,3 +116,203 @@
     transform: translateY(0);
   }
 }
+
+.starry-nav {
+  isolation: isolate;
+}
+
+.starry-nav::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 8% 34%, rgb(186 230 253 / 0.42) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 28% 72%, rgb(125 211 252 / 0.28) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 46% 22%, rgb(186 230 253 / 0.32) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 67% 58%, rgb(125 211 252 / 0.3) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 84% 30%, rgb(186 230 253 / 0.3) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 95% 78%, rgb(125 211 252 / 0.24) 0 1px, transparent 1.7px);
+  content: "";
+  pointer-events: none;
+}
+
+.starry-nav::after {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(56 189 248 / 0.38) 50%, transparent);
+  box-shadow: 0 0 9px rgb(56 189 248 / 0.2);
+  content: "";
+  pointer-events: none;
+}
+
+.starry-nav > :not(.nav-stars) {
+  position: relative;
+  z-index: 1;
+}
+
+.nav-stars {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.nav-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgb(186 230 253 / 0.72);
+  box-shadow: 0 0 6px rgb(56 189 248 / 0.5);
+  animation: nav-twinkle 3.8s ease-in-out infinite alternate;
+}
+
+.nav-star:nth-child(1) { top: 18%; left: 17%; }
+.nav-star:nth-child(2) { top: 68%; left: 32%; animation-delay: 1.1s; }
+.nav-star:nth-child(3) { top: 23%; left: 49%; animation-delay: 2.1s; }
+.nav-star:nth-child(4) { top: 72%; left: 63%; animation-delay: 0.6s; }
+.nav-star:nth-child(5) { top: 20%; left: 78%; animation-delay: 1.7s; }
+.nav-star:nth-child(6) { top: 62%; left: 91%; animation-delay: 2.6s; }
+.nav-star:nth-child(7) { top: 42%; left: 6%; animation-delay: 1.4s; }
+
+@keyframes nav-twinkle {
+  from { opacity: 0.18; transform: scale(0.75); }
+  to { opacity: 0.72; transform: scale(1.15); }
+}
+
+.mission-status-dot {
+  position: relative;
+  box-shadow: 0 0 8px rgb(74 222 128 / 0.5);
+}
+
+.mission-status-dot::after {
+  position: absolute;
+  inset: -3px;
+  border: 1px solid rgb(74 222 128 / 0.5);
+  border-radius: 50%;
+  content: "";
+  animation: status-pulse 2.2s ease-out infinite;
+}
+
+@keyframes status-pulse {
+  0% { opacity: 0.75; transform: scale(0.7); }
+  100% { opacity: 0; transform: scale(1.8); }
+}
+
+.hud-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: border-color 180ms ease, background-color 180ms ease;
+}
+
+.hud-card::before {
+  position: absolute;
+  z-index: 0;
+  inset: -35% -60%;
+  background: linear-gradient(110deg, transparent 43%, rgb(56 189 248 / 0.025) 47%, rgb(125 211 252 / 0.09) 50%, rgb(56 189 248 / 0.025) 53%, transparent 58%);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-48%) rotate(8deg);
+}
+
+.hud-card:hover {
+  border-color: rgb(56 189 248 / 0.24);
+}
+
+.hud-card:hover::before {
+  animation: hud-radar-sweep 1.15s ease-out both;
+}
+
+.hud-card > :not(.hud-reticles) {
+  position: relative;
+  z-index: 1;
+}
+
+.hud-reticles {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hud-reticle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  color: rgb(125 211 252 / 0.42);
+}
+
+.hud-reticle::before,
+.hud-reticle::after {
+  position: absolute;
+  background: currentColor;
+  content: "";
+}
+
+.hud-reticle::before {
+  top: 4px;
+  width: 10px;
+  height: 1px;
+}
+
+.hud-reticle::after {
+  left: 4px;
+  width: 1px;
+  height: 10px;
+}
+
+.hud-reticle-top-left { top: 8px; left: 8px; }
+.hud-reticle-top-right { top: 8px; right: 8px; }
+.hud-reticle-bottom-left { bottom: 8px; left: 8px; }
+.hud-reticle-bottom-right { right: 8px; bottom: 8px; }
+
+@keyframes hud-radar-sweep {
+  0% { opacity: 0; transform: translateX(-48%) rotate(8deg); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(48%) rotate(8deg); }
+}
+
+.planetary-horizon {
+  position: relative;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.planetary-horizon::before {
+  position: absolute;
+  bottom: -150px;
+  left: -17%;
+  width: 134%;
+  height: 210px;
+  border: 1px solid rgb(56 189 248 / 0.22);
+  border-radius: 50%;
+  box-shadow: 0 -4px 22px rgb(56 189 248 / 0.1), 0 -1px 8px rgb(125 211 252 / 0.1);
+  content: "";
+}
+
+.planetary-horizon::after {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgb(56 189 248 / 0.08), transparent 68%);
+  content: "";
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-star,
+  .mission-status-dot::after {
+    animation: none;
+  }
+
+  .hud-card:hover::before {
+    animation: none;
+    opacity: 0.18;
+    transform: translateX(0) rotate(8deg);
+  }
+}
