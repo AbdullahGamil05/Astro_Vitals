@@ -4,13 +4,18 @@ export const chartTooltipStyle = {
   backgroundColor: "#0B0F19",
   border: "1px solid rgb(255 255 255 / 0.15)",
   borderRadius: 6,
-  fontSize: 12,
-  fontFamily: "JetBrains Mono, monospace",
+  fontSize: 13,
+  fontFamily: "var(--font-sans)",
   color: "#F8FAFC",
   boxShadow: "none",
 } as const;
 
-export const axisTick = { fill: "#94A3B8", fontSize: 10, fontFamily: "JetBrains Mono, monospace" } as const;
+export const axisTick = {
+  fill: "#94A3B8",
+  fontSize: 11,
+  fontFamily: "var(--font-sans)",
+  fontVariantNumeric: "tabular-nums",
+} as const;
 
 interface TrendChartProps<T extends object> {
   data: T[];
@@ -46,7 +51,7 @@ export function TrendChart<T extends object>({
           <YAxis tick={axisTick} tickLine={false} axisLine={false} domain={domain} width={38} />
           <Tooltip
             contentStyle={chartTooltipStyle}
-            labelStyle={{ color: "#A3B1C6" }}
+            labelStyle={{ color: "#A3B1C6", fontFamily: "var(--font-sans)", fontSize: 12 }}
             formatter={(v) => [`${v} ${unit}`, name]}
             cursor={{ stroke: "rgb(255 255 255 / 0.2)", strokeDasharray: "3 3" }}
           />

@@ -48,7 +48,14 @@ export function Sidebar({ role, collapsed, mobileOpen, onToggleCollapsed, onClos
           </button>
         </div>
 
-        <p className={cn("orbit-eyebrow px-5 pb-2 pt-5", collapsed && "lg:sr-only")}>{roleLabel}</p>
+        <p
+          className={cn(
+            "px-5 pb-2 pt-5 font-sans text-[11px] font-medium uppercase tracking-[0.12em] text-orbit-dim",
+            collapsed && "lg:sr-only",
+          )}
+        >
+          {roleLabel}
+        </p>
 
         <nav aria-label="Primary" className="flex-1 space-y-1 overflow-y-auto px-3">
           {items.map(({ label, to, icon: Icon, end }) => (
@@ -60,7 +67,7 @@ export function Sidebar({ role, collapsed, mobileOpen, onToggleCollapsed, onClos
               title={collapsed ? label : undefined}
               className={({ isActive }) =>
                 cn(
-                  "group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                  "group relative flex items-center gap-3 rounded-lg px-3 py-2.5 font-sans text-sm font-semibold transition-colors",
                   collapsed && "lg:justify-center lg:px-0",
                   isActive
                     ? "bg-white/[0.06] text-ink"
@@ -83,7 +90,7 @@ export function Sidebar({ role, collapsed, mobileOpen, onToggleCollapsed, onClos
 
         <div className="border-t border-orbit-line p-3">
           <div className={cn("mb-3 rounded-lg border border-orbit-line bg-white/[0.02] p-3 text-xs text-orbit-muted", collapsed && "lg:hidden")}>
-            <span className="orbit-eyebrow block">Prototype</span>
+            <span className="block font-sans text-[11px] font-medium uppercase tracking-[0.12em] text-orbit-dim">Prototype</span>
             <p className="mt-1.5 leading-relaxed">Demo build with simulated data. Not for clinical use.</p>
           </div>
           <button

@@ -27,7 +27,7 @@ export function CardHeader({
   return (
     <header className="mb-5 flex items-start justify-between gap-3 border-b border-white/10 pb-4">
       <div>
-        <h2 className="text-[15px] font-semibold tracking-tight text-ink">{title}</h2>
+        <h2 className="font-display text-[15px] font-semibold tracking-tight text-ink">{title}</h2>
         {subtitle ? <p className="mt-1 text-xs text-orbit-muted">{subtitle}</p> : null}
       </div>
       {action}
@@ -49,7 +49,7 @@ export function Avatar({
   return (
     <span
       aria-hidden="true"
-      className="inline-flex shrink-0 items-center justify-center rounded-full font-mono font-medium text-ink ring-1 ring-white/15"
+      className="inline-flex shrink-0 items-center justify-center rounded-full font-sans font-medium text-ink ring-1 ring-white/15"
       style={{
         width: size,
         height: size,
@@ -66,7 +66,7 @@ export function StatusBadge({ status, compact }: { status: HealthStatus; compact
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded border px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-wider",
+        "inline-flex items-center gap-1.5 rounded border px-2 py-0.5 font-sans text-[11px] font-medium uppercase tracking-[0.08em]",
         statusSoftBg[status],
         statusText[status],
       )}
@@ -97,7 +97,7 @@ export function SeverityBadge({ severity }: { severity: AlertSeverity }) {
   const s = severityStyle[severity];
   return (
     <span
-      className="inline-flex items-center rounded border px-2 py-0.5 font-mono text-[11px] font-medium uppercase tracking-wider"
+      className="inline-flex items-center rounded border px-2 py-0.5 font-sans text-[11px] font-medium uppercase tracking-[0.08em]"
       style={{ color: s.color, borderColor: `${s.color}40`, backgroundColor: `${s.color}14` }}
     >
       {s.label}
@@ -109,7 +109,7 @@ export function SimulatedTag({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded border border-white/15 px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider text-orbit-muted",
+        "inline-flex items-center rounded border border-white/15 px-1.5 py-0.5 font-sans text-[10px] font-medium uppercase tracking-[0.08em] text-orbit-muted",
         className,
       )}
     >

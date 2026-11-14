@@ -51,7 +51,7 @@ export function MedicalOverviewPage() {
                 <XAxis dataKey="label" tick={axisTick} tickLine={false} axisLine={false} interval={2} />
                 <YAxis tick={axisTick} tickLine={false} axisLine={false} domain={[20, 100]} width={38} />
                 <Tooltip contentStyle={chartTooltipStyle} labelStyle={{ color: "#A3B1C6" }} />
-                <Legend wrapperStyle={{ fontSize: 11, color: "#A3B1C6", fontFamily: "JetBrains Mono, monospace" }} iconType="plainline" />
+                <Legend wrapperStyle={{ fontSize: 11, color: "#A3B1C6", fontFamily: "var(--font-sans)" }} iconType="plainline" />
                 {astronauts.map((a) => (
                   <Line
                     key={a.id}

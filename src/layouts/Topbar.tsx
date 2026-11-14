@@ -73,8 +73,10 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
       </button>
 
       <div className="min-w-0 flex-1">
-        <p className="orbit-eyebrow hidden sm:block">{user.role === "astronaut" ? "Crew Console" : "Medical Console"}</p>
-        <h1 className="orbit-title truncate text-xl leading-tight text-ink">{title}</h1>
+        <p className="hidden font-sans text-[11px] font-medium uppercase tracking-[0.12em] text-orbit-dim sm:block">
+          {user.role === "astronaut" ? "Crew Console" : "Medical Console"}
+        </p>
+        <h1 className="font-display truncate text-xl font-semibold leading-tight tracking-tight text-ink">{title}</h1>
       </div>
 
       <Popover
@@ -88,7 +90,7 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
           >
             <Bell className="size-5" />
             {relevantAlerts.length ? (
-              <span className="absolute right-1 top-1 flex size-4 items-center justify-center rounded-full bg-orbit-crit font-mono text-[10px] font-semibold text-ink">
+              <span className="absolute right-1 top-1 flex size-4 items-center justify-center rounded-full bg-orbit-crit font-sans text-[10px] font-semibold text-ink">
                 {relevantAlerts.length}
               </span>
             ) : null}
@@ -97,7 +99,7 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
       >
         {(close) => (
           <div>
-            <p className="orbit-eyebrow px-2 pb-2 pt-1">Active notifications</p>
+            <p className="px-2 pb-2 pt-1 font-sans text-[11px] font-medium uppercase tracking-[0.12em] text-orbit-dim">Active notifications</p>
             {relevantAlerts.length === 0 ? (
               <p className="px-2 py-3 text-sm text-orbit-muted">No active alerts.</p>
             ) : (

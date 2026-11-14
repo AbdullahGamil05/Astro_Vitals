@@ -1,0 +1,7 @@
+# No dependency lifecycle builds are required by the current Vite/Rolldown stack.
+allowBuilds: {}
+
+# This exact version was already reviewed and committed in d76f4ef when
+# react-markdown was added. Keep the release-age policy for all other packages.
+minimumReleaseAgeExclude:
+  - mdast-util-to-hast@13.2.2

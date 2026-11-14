@@ -33,9 +33,9 @@ export function LoginPage() {
       <div className="relative w-full max-w-md">
         <div className="mb-8 flex flex-col items-center text-center">
           <LogoMark size={72} />
-          <h1 className="mt-4 font-display text-5xl font-semibold tracking-tight text-ink">AstroVitals</h1>
-          <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-nasa-red">NASA Health Command</p>
-          <p className="mt-2 text-sm text-orbit-muted [text-shadow:0_1px_10px_#06080F]">Astronaut health monitoring and medical decision support</p>
+          <h1 className="brand-wordmark mt-4 text-4xl text-ink sm:text-5xl">AstroVitals</h1>
+          <p className="mt-2 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-nasa-red">NASA Health Command</p>
+          <p className="mt-3 text-[15px] leading-relaxed text-orbit-muted [text-shadow:0_1px_10px_#06080F]">Astronaut health monitoring and medical decision support</p>
         </div>
 
         <div className="orbit-card orbit-glow p-6 sm:p-7">
