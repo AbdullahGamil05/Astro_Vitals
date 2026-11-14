@@ -94,10 +94,10 @@ export function AstronautHomePage() {
           </Link>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <VitalCard kind="heartRate" value={me.vitals.heartRate} icon={HeartPulse} />
-          <VitalCard kind="spo2" value={me.vitals.spo2} icon={Droplets} />
-          <VitalCard kind="temperature" value={me.vitals.temperature} icon={Thermometer} />
-          <VitalCard kind="respiratoryRate" value={me.vitals.respiratoryRate} icon={Wind} />
+          <VitalCard kind="heartRate" value={me.vitals.heartRate} icon={HeartPulse} transitionKey={me.id} />
+          <VitalCard kind="spo2" value={me.vitals.spo2} icon={Droplets} transitionKey={me.id} />
+          <VitalCard kind="temperature" value={me.vitals.temperature} icon={Thermometer} transitionKey={me.id} />
+          <VitalCard kind="respiratoryRate" value={me.vitals.respiratoryRate} icon={Wind} transitionKey={me.id} />
         </div>
       </section>
 

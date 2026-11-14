@@ -62,7 +62,10 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
   const profilePath = user.role === "astronaut" ? "/astronaut/profile" : "/medical/directory";
 
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-orbit-line bg-orbit-bg/85 px-4 backdrop-blur-md sm:px-6">
+    <header className="starry-nav sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-sky-500/20 bg-orbit-bg/85 px-4 backdrop-blur-md sm:px-6">
+      <span className="nav-stars" aria-hidden="true">
+        {Array.from({ length: 7 }, (_, index) => <span className="nav-star" key={index} />)}
+      </span>
       <button
         type="button"
         onClick={onOpenMobileNav}
@@ -76,6 +79,15 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
         <p className="orbit-eyebrow hidden sm:block">{user.role === "astronaut" ? "Crew Console" : "Medical Console"}</p>
         <h1 className="orbit-title truncate text-xl leading-tight text-ink">{title}</h1>
       </div>
+
+      <span
+        className="mission-status-pill hidden items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/[0.06] px-3 py-1.5 font-mono text-[9px] font-medium tracking-[0.12em] text-emerald-100/90 xl:inline-flex"
+        role="status"
+        aria-label="Mission status: Mars sol 142, telemetry nominal"
+      >
+        <span className="mission-status-dot size-1.5 shrink-0 rounded-full bg-emerald-400" aria-hidden="true" />
+        MARS SOL 142 <span className="text-emerald-200/40">•</span> TELEMETRY NOMINAL
+      </span>
 
       <Popover
         trigger={({ toggle, open }) => (

@@ -104,10 +104,10 @@ export function AstronautProfileView({ astronaut: a, backTo }: { astronaut: Astr
           <SimulatedTag />
         </div>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <VitalCard kind="heartRate" value={a.vitals.heartRate} icon={HeartPulse} />
-          <VitalCard kind="spo2" value={a.vitals.spo2} icon={Droplets} />
-          <VitalCard kind="temperature" value={a.vitals.temperature} icon={Thermometer} />
-          <VitalCard kind="respiratoryRate" value={a.vitals.respiratoryRate} icon={Wind} />
+          <VitalCard kind="heartRate" value={a.vitals.heartRate} icon={HeartPulse} transitionKey={a.id} />
+          <VitalCard kind="spo2" value={a.vitals.spo2} icon={Droplets} transitionKey={a.id} />
+          <VitalCard kind="temperature" value={a.vitals.temperature} icon={Thermometer} transitionKey={a.id} />
+          <VitalCard kind="respiratoryRate" value={a.vitals.respiratoryRate} icon={Wind} transitionKey={a.id} />
         </div>
       </section>
 
