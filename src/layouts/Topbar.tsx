@@ -138,7 +138,7 @@ export function Topbar({ onOpenMobileNav }: { onOpenMobileNav: () => void }) {
             aria-haspopup="menu"
             className="flex items-center gap-2.5 rounded-lg py-1 pl-1 pr-2 hover:bg-white/5"
           >
-            <Avatar name={user.name} from={user.avatarFrom} to={user.avatarTo} size={34} />
+            <Avatar name={user.name} from={user.avatarFrom} to={user.avatarTo} src={user.avatarUrl} size={34} />
             <span className="hidden text-left sm:block">
               <span className="block text-sm font-medium leading-tight text-ink">{user.name}</span>
               <span className="block text-xs capitalize leading-tight text-orbit-muted">

@@ -71,7 +71,7 @@ export function DirectoryPage() {
                         onClick={(e) => e.stopPropagation()}
                         className="flex items-center gap-3"
                       >
-                        <Avatar name={a.name} from={a.avatarFrom} to={a.avatarTo} size={36} />
+                        <Avatar name={a.name} from={a.avatarFrom} to={a.avatarTo} src={a.avatarUrl} size={36} />
                         <span>
                           <span className="block font-medium text-ink">{a.name}</span>
                           <span className="block text-xs text-orbit-muted">{a.title}</span>

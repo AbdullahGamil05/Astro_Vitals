@@ -59,6 +59,7 @@ export interface Astronaut {
   points: number;
   avatarFrom: string;
   avatarTo: string;
+  avatarUrl: string;
   hourly: HourlyPoint[];
   daily: DailyPoint[];
   assessments: Assessment[];
@@ -101,4 +102,5 @@ export interface DemoAccount {
   scenario?: HealthStatus;
   avatarFrom: string;
   avatarTo: string;
+  avatarUrl: string;
 }

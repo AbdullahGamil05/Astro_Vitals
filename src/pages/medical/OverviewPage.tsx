@@ -113,7 +113,7 @@ export function MedicalOverviewPage() {
               <li key={ev.id}>
                 <Link to={`/medical/astronauts/${a.id}`} className="flex items-center gap-3 py-3 hover:bg-white/[0.02]">
                   <SeverityDot severity={ev.severity} />
-                  <Avatar name={a.name} from={a.avatarFrom} to={a.avatarTo} size={30} />
+                  <Avatar name={a.name} from={a.avatarFrom} to={a.avatarTo} src={a.avatarUrl} size={30} />
                   <span className="min-w-0 flex-1">
                     <span className="block text-sm text-ink">{ev.text}</span>
                     <span className="block text-xs text-orbit-muted">{a.name}</span>
